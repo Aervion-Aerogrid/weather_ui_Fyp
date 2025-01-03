@@ -138,3 +138,15 @@ form {
 .save-settings-button:hover {
   background-color: #5ca8e0; /* Darker blue on hover */
 }
+
+
+.menu-icon {
+  width: 40px;  /* Adjust the width */
+  height: 40px; /* Adjust the height */
+  transition: transform 0.3s ease, opacity 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.menu-icon:hover {
+  transform: scale(1.1); /* Slightly enlarge the icon */
+  opacity: 0.8; /* Make the icon slightly transparent on hover */
+}

@@ -39,6 +39,7 @@
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
     "allowSyntheticDefaultImports": true,
-    "strictTemplates": true
+    "strictTemplates": true,
+    "enableIvy": true
   }
 }

@@ -1,7 +1,7 @@
 /* Navbar brand styling */
 .navbar-brand {
   margin-left: 30px; /* Space from the left edge */
-  /* Make the brand name bold */
+
 }
 
 /* Align elements to the right and add spacing */
@@ -20,7 +20,8 @@
 .form-control {
   margin-right: 5px; /* Space between form controls */
 }
-/* styles.css or component-specific stylesheet */
+
+/* Navbar navigation items styling */
 .navbar-nav .nav-item {
   margin-right: 20px; /* Adjust the spacing as needed */
 }
@@ -46,11 +47,21 @@
   display: none; /* Hide the default dropdown arrow */
 }
 
-/* app.component.css or your header component CSS */
+/* Navbar icon styling */
 .navbar-icon {
   width: 40px; /* Adjust the size as needed */
   height: auto; /* Maintain aspect ratio */
   margin-right: 10px;
+}
+
+/* Hover effect for nav items */
+.navbar-nav .nav-item .nav-link {
+  transition: color 0.3s ease, transform 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.navbar-nav .nav-item .nav-link:hover {
+  color: #12c6e6; /* Change the color on hover (adjust as needed) */
+  transform: scale(1.1); /* Slight zoom effect on hover */
 }
 
 /* Optional: Add additional styling */
@@ -58,3 +69,64 @@
   display: flex;
   align-items: center;
 }
+
+
+
+/* Existing navbar-brand styles */
+.navbar-brand {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-icon {
+  width: 40px; /* Adjust the size as needed */
+  height: auto; /* Maintain aspect ratio */
+  margin-right: 10px;
+}
+
+/* Add animation to the text */
+.animated-text {
+  opacity: 0; /* Start invisible */
+  transform: translateY(20px); /* Start slightly lower */
+  animation: fadeInUp 2s ease-out forwards; /* Apply animation */
+
+}
+
+/* Animation keyframes */
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px); /* Start lower */
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0); /* End at normal position */
+  }
+}
+
+
+
+
+.custom-logout-btn {
+  background-color: green;
+  color: white;
+  border: none;
+  transition: background-color 0.4s ease;
+}
+
+.custom-logout-btn:hover {
+  background-color: red;
+  color: white;
+}
+
+
+
+
+
+
+
+
+
+
+
+

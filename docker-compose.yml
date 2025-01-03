@@ -1,0 +1,12 @@
+services:
+  angular-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: weather_angular_app
+    ports:
+      - "4200:4200"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: ["ng", "serve", "--host", "0.0.0.0"]

@@ -5,16 +5,31 @@
   </video>
   <div class="login-container">
     <img
-      src="../../../assets/icons/aervion.jpg"
+      src="../../../assets/icons/aervion-removebg-preview.png"
       alt="Login Image"
-      class="login-image"
+      class="login-image rotating-rtl"
     />
 
-    <h1>Admin Login</h1>
+    <div class="keyboard">
+      <h1>
+        <span class="key">A</span>
+        <span class="key">D</span>
+        <span class="key">M</span>
+        <span class="key">I</span>
+        <span class="key">N</span>
+        <span class="key">&nbsp;</span> <!-- Add space between words -->
+        <span class="key">L</span>
+        <span class="key">O</span>
+        <span class="key">G</span>
+        <span class="key">I</span>
+        <span class="key">N</span>
+      </h1>
+    </div>
+
 
     <form (ngSubmit)="login()" #loginForm="ngForm" novalidate>
       <div class="form-group">
-        <label for="username">Admin Username*</label>
+        <label for="username">Username*</label>
         <input
           type="text"
           id="username"
@@ -24,7 +39,7 @@
           #usernameField="ngModel"
           required
           minlength="6"
-          placeholder="Enter your username"
+          placeholder="Enter Username"
           (input)="validateUsername()"
         />
         <div
@@ -39,27 +54,43 @@
 
       <div class="form-group">
         <label for="password">Password*</label>
-        <input
-          type="password"
-          id="password"
-          class="form-control"
-          [(ngModel)]="password"
-          name="password"
-          #passwordField="ngModel"
-          required
-          minlength="6"
-          placeholder="Enter your password"
-          (input)="validatePassword()"
-        />
-        <div
-          *ngIf="passwordField.invalid && passwordField.touched"
-          class="text-danger"
-        >
+        <div class="input-group">
+          <!-- Password Input Field -->
+          <input
+            type="{{ passwordVisible ? 'text' : 'password' }}"
+            id="password"
+            class="form-control"
+            [(ngModel)]="password"
+            name="password"
+            #passwordField="ngModel"
+            required
+            minlength="6"
+            placeholder="Enter Password"
+            (input)="validatePassword()"
+          />
+          <div class="input-group-append">
+            <!-- Eye Icon Button -->
+            <button
+              type="button"
+              class="btn btn-outline-secondary"
+              (click)="togglePasswordVisibility()"
+              [attr.aria-label]="passwordVisible ? 'Hide password' : 'Show password'"
+              title="{{ passwordVisible ? 'Hide password' : 'Show password' }}"
+            >
+              <i class="fa" [ngClass]="passwordVisible ? 'fa-eye-slash' : 'fa-eye'"></i>
+            </button>
+          </div>
+        </div>
+
+        <div *ngIf="passwordField.invalid && passwordField.touched" class="text-danger">
           <small *ngIf="passwordField.errors?.['required']">Password is required.</small>
-          <small *ngIf="passwordField.errors?.['minlength']"></small>
-          <small *ngIf="passwordField.errors?.['pattern']"></small>
+          <small *ngIf="passwordField.errors?.['minlength']">Password must be at least 6 characters long.</small>
+          <small *ngIf="passwordField.errors?.['pattern']">Password does not meet the required pattern.</small>
         </div>
       </div>
+
+
+
       <div class="loading-spinner" *ngIf="isLoading"></div>
       <button
         type="submit"
@@ -75,26 +106,28 @@
         {{ loginError }}
       </div>
 
-      <!-- Link to Sign Up page, triggers PIN modal on click -->
-      <div class="text-center mt-3">
-        <small>
-          Don't have an account?
-          <a
-            href="javascript:void(0)"
-            (click)="onSignUpClick()"
-            class="signup-link"
-            >Sign Up</a
-          >
-        </small>
-      </div>
+<!-- Link to Sign Up page, triggers PIN modal on click -->
+<div class="text-center mt-3">
+  <small>
+    Don't have an account?
+    <a
+      href="javascript:void(0)"
+      (click)="onSignUpClick()"
+      class="signup-link"
+    >Sign Up</a>
+  </small>
+</div>
+
 
       <!-- Conditionally show the PIN modal -->
-      <app-secretpin
-        *ngIf="showPinModal"
-        (pinVerified)="onPinVerified($event)"
-      ></app-secretpin>
+
     </form>
+
+    <app-secretpin
+    *ngIf="showPinModal"
+    (pinVerified)="onPinVerified($event)"
+  ></app-secretpin>
   </div>
   <app-header></app-header>
 </main>
-<app-footerpage></app-footerpage>
+

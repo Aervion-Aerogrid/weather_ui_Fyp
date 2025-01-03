@@ -11,9 +11,7 @@ import { VisualizationComponent } from './components/visualization/visualization
 import { DrawerpageComponent } from './components/drawerpage/drawerpage.component';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
-// Import HttpClientModule
 import { HttpClientModule } from '@angular/common/http';
-// Services
 import { CsvDataService } from './services/csv/csv-data.service';
 import { IsobarImageDataService } from './services/image/isobar-image-data.service';
 import { MapComponent } from './components/map/map.component';
@@ -31,10 +29,11 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
 import { MatRadioModule } from '@angular/material/radio';
-
 import { MatOptionModule } from '@angular/material/core';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { SecretPinComponent } from './components/loginpage/secretpin/secretpin.component';
+import { DetailComponent } from './components/map/detail/detail.component';
+import { ImageDownloadComponent } from './components/map/image-download/image-download.component';
 
 
 
@@ -56,6 +55,8 @@ import { SecretPinComponent } from './components/loginpage/secretpin/secretpin.c
     ClimatepageComponent,
     BarGraphComponent,
     SecretPinComponent,
+    DetailComponent,
+    ImageDownloadComponent,
 
 
   ],

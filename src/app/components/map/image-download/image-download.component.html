@@ -1,0 +1,30 @@
+<!-- Fixed container at the beginning of the row -->
+<div class="fixed-container">
+  <p>Download Selected Image Type: Layer / Heatmap</p>
+
+
+<!-- Image Download Row with Cards -->
+<div *ngIf="images.length > 0" class="download-container">
+  <div *ngFor="let image of images" class="card-container">
+    <!-- Card Layout for Image Preview -->
+    <div class="card" style="width: 18rem;">
+      <img [src]="image.url" class="card-img-top" alt="Image preview" (click)="openImageInPopup(image)" />
+      <div class="card-body">
+        <h5 class="card-title">{{ image.name }}</h5>
+        <!-- Button to open image in a popup and allow download -->
+        <button (click)="openImageInPopup(image)" class="btn btn-primary">
+          Open & Download Image
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Show loading spinner if images are being fetched -->
+<div *ngIf="loading" class="loading-spinner">
+  <div class="spinner-border text-primary" role="status">
+    <span class="sr-only">Loading...</span>
+  </div>
+</div>
+
+</div>

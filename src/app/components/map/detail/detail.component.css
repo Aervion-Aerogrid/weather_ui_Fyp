@@ -1,0 +1,81 @@
+
+
+/*
+.container {
+  padding: 20px;
+}
+
+.live-status {
+  width: 100px;
+  height: 30px;
+  text-align: center;
+  line-height: 30px;
+  border-radius: 5px;
+}
+
+.search-bar {
+  margin-bottom: 20px;
+}
+
+.list-group-item {
+  margin-bottom: 15px;
+  background-color: #f9f9f9;
+}
+
+h5 {
+  margin: 0;
+}
+
+p {
+  margin: 5px 0;
+}
+
+/* Style for the green dot next to Live status */
+.live-status {
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+}
+
+.live-dot {
+  width: 12px;
+  height: 12px;
+  background-color: green;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+
+
+/* Style the station card to make it hoverable */
+.station-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.station-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+
+.row {
+  display: flex;
+  justify-content: space-between;
+}
+/* Station Data Container */
+.station-container {
+  padding: 20px;
+  background-color: #f8f9fa;
+  height: 850px;
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* New Container */
+.new-container {
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+

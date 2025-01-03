@@ -1,0 +1,207 @@
+
+
+
+
+.download-item img {
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.download-item img:hover {
+  transform: scale(1.05); /* Slight zoom effect on hover */
+}
+/* Fixed container at the start */
+.fixed-container {
+  position: sticky;
+  top: 0;
+  background-color: #f8f9fa;
+  margin: 20px;
+  height: 500px;
+  padding: 10px 0;
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  z-index: 10;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Card container style */
+.card-container {
+  margin: 10px; /* Reduced margin between cards */
+  display: inline-block;
+  vertical-align: top;
+  width: 18rem; /* Adjust as needed */
+}
+
+.card-img-top {
+  width: 100%;
+  height: auto;
+}
+
+.card-body {
+  text-align: center;
+}
+
+/* Button Styling */
+.btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+
+
+/* Loading spinner center styling */
+.loading-spinner {
+  text-align: center;
+  margin-top: 20px;
+}
+
+
+/* Responsive card container (optional) */
+@media (max-width: 768px) {
+  .card-container {
+    width: 100%;
+    margin-bottom: 10px; /* Reduced margin on smaller screens */
+  }
+
+  .card-row {
+    flex-direction: column; /* Stack the cards vertically on smaller screens */
+    gap: 10px; /* Reduced gap on smaller screens */
+  }
+}
+
+
+/* Flexbox container to center cards */
+.card-row {
+  display: flex;
+  justify-content: center;  /* Center cards horizontally */
+  gap: 20px;  /* Adds space between cards */
+  margin-top: 20px; /* Optional margin to add space from the fixed container */
+}
+
+/* Individual card styling */
+.card-container {
+  width: 18rem; /* Adjust as needed */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition on hover */
+}
+
+.card-container:hover {
+  transform: scale(1.05); /* Slightly scale up the card */
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); /* Add shadow on hover */
+}
+
+/* Card styling */
+.card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden; /* Ensure the image and content do not overflow */
+}
+
+.card-img-top {
+  width: 100%;
+  height: auto;
+  transition: transform 0.3s ease; /* Smooth transition for the image */
+}
+
+/* Image zoom effect on hover */
+.card-container:hover .card-img-top {
+  transform: scale(1.0); /* Slight zoom effect on image when card is hovered */
+}
+
+.card-body {
+  text-align: center;
+  padding: 15px;
+}
+
+/* Button Styling */
+.btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+  transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+  border-color: #0056b3;
+}
+
+/* Loading spinner center styling */
+.loading-spinner {
+  text-align: center;
+  margin-top: 20px;
+}
+.fixed-container {
+  margin-bottom: 20px;
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.download-container {
+  display: flex;
+  flex-wrap: nowrap; /* Prevent wrapping */
+  overflow-y: auto; /* Enable vertical scroll if images exceed the container height */
+  max-height: 500px; /* Adjust to your desired height */
+  gap: 20px; /* Space between cards */
+  padding: 10px;
+}
+
+.card-container {
+  flex: 0 0 auto; /* Prevent the cards from shrinking or growing */
+  margin-bottom: 10px; /* Optional, for spacing between rows if needed */
+}
+
+.card {
+  width: 18rem;
+  transition: transform 0.3s ease-in-out;
+}
+
+.card:hover {
+  transform: scale(1.05); /* Slightly enlarge the card on hover */
+}
+
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.fixed-container {
+  margin-bottom: 20px;
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.download-container {
+  display: flex;
+  flex-wrap: nowrap; /* Prevent wrapping */
+  overflow-y: auto; /* Enable vertical scroll if images exceed the container height */
+  max-height: 500px; /* Adjust to your desired height */
+  gap: 20px; /* Space between cards */
+  padding: 10px;
+  justify-content: center; /* Center images horizontally */
+  align-items: center; /* Vertically center images within the container */
+}
+
+.card-container {
+  flex: 0 0 auto; /* Prevent the cards from shrinking or growing */
+  margin-bottom: 10px; /* Optional, for spacing between rows if needed */
+}
+
+.card {
+  width: 18rem;
+  transition: transform 0.3s ease-in-out;
+}
+
+.card:hover {
+  transform: scale(1.05); /* Slightly enlarge the card on hover */
+}
+
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}

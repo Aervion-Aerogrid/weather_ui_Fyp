@@ -1,22 +1,29 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 import * as Papa from 'papaparse';
 import { environment } from '../../../environments/environment';
 
 export interface StationData {
+  Station_ID: number;
   Title: string;
-  Longitude: number;
   Latitude: number;
+  Longitude: number;
   Temperature: number;
+  Station_pressure: number;
+  Sea_level_pressure: number;
   Humidity:number;
-  High_cloud: number;
-  Low_cloud:number;
-  Mid_cloud:number;
-  windSpeed_windDirection:string;
+  High_clouds: number;
+  Low_clouds:number;
+  Mid_clouds:number;
+  Wind_combined:string;
   Sky_cover:number;
+  Dew_point:number;
+  Wind_speed:number;
+  Wind_direction:number;
+  Precipitation_rate:number;
  }
-
 
 @Injectable({
   providedIn: 'root'
@@ -28,39 +35,37 @@ export class CsvDataService {
 
   // Method to fetch CSV data from the FastAPI backend without caching
   fetchCsvData(): Observable<StationData[]> {
-    // Append a timestamp query parameter to prevent caching
     const urlWithNoCache = `${this.csvUrl}?_=${new Date().getTime()}`;
-
     console.log('Fetching CSV data from:', urlWithNoCache);
 
-    return new Observable<StationData[]>(observer => {
-      this.http.get(urlWithNoCache, { responseType: 'text' }).subscribe({
-        next: (data: string) => this.parseCsvData(data, observer),
-        error: (error) => this.handleFetchError(error, observer)
-      });
-    });
+    return this.http.get(urlWithNoCache, { responseType: 'text' }).pipe(
+      map((data: string) => this.parseCsvData(data)), // Parse CSV data
+      catchError((error) => this.handleFetchError(error)) // Centralized error handling
+    );
   }
 
-  // Helper method to parse CSV data
-  private parseCsvData(data: string, observer: any) {
+  // Helper method to parse CSV data and convert it to StationData[]
+  private parseCsvData(data: string): StationData[] {
+    let parsedData: StationData[] = [];
     Papa.parse<StationData>(data, {
       header: true,
       dynamicTyping: true, // Automatically convert numeric values
       complete: (results: Papa.ParseResult<StationData>) => {
         if (results.data && results.data.length > 0) {
-          observer.next(results.data); // Emit the parsed data array
-        } else {
-          observer.error('Parsed data is empty or invalid');
+          parsedData = results.data;
         }
-        observer.complete();
       },
-      error: (error) => observer.error('Error during CSV parsing: ' + error.message)
+      error: (error) => {
+        console.error('Error during CSV parsing:', error.message);
+      }
     });
+    return parsedData;
   }
 
   // Centralized error handling for fetch operations
-  private handleFetchError(error: any, observer: any) {
+  private handleFetchError(error: any): Observable<StationData[]> {
     console.error('Error fetching data:', error);
-    observer.error(error);
+    // Optionally, you can return an empty array or rethrow the error
+    return of([]); // Return an empty array in case of an error
   }
 }

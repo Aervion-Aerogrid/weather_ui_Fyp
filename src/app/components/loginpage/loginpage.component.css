@@ -1,15 +1,13 @@
 .login-container {
-  max-width: 700px;
+  max-width: 500px;
   min-height: 500px; /* Use min-height instead of max-height */
   margin: 100px auto;
-  padding: 20px;
-  border: 3px solid #ccc;
+  padding: 50px;
   border-radius: 30px;
   box-shadow: 0px 4px 6px rgba(130, 245, 235, 0.1);
   background-color: rgba(205, 217, 221, var(--login-container-opacity)); /* Use the opacity variable */
   transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition */
 }
-/* Background video */
 .background-video {
   position: fixed; /* Fix the video in the background */
   top: 0; /* Align to the top */
@@ -19,7 +17,13 @@
   object-fit: cover; /* Cover the area without distorting the aspect ratio */
   z-index: -1; /* Send the video behind other content */
 }
-
+/* Style for the content area */
+.content {
+  position: relative; /* Required for absolute positioning of the video */
+  z-index: 1; /* Bring the content above the video */
+  color: white; /* Optional: Change text color for readability */
+}
+/* Spinner CSS*/
 .loading-spinner {
   width: 30px;
   height: 30px;
@@ -29,56 +33,26 @@
   animation: spin 1s linear infinite;
   margin: 10px auto;
 }
-
-/* Add a spin animation to the spinner */
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
-
-
+/* Spinner CSS*/
 .login-container:hover {
   background-color: rgb(255, 255, 255); /* Increase opacity on hover */
-  box-shadow: 0px 8px 12px rgba(99, 194, 211, 0.2); /* Increase shadow on hover */
+  box-shadow: 0px 8px 12px rgba(0, 0, 0, 0.2); /* Increase shadow on hover */
   transform: translateY(-5px); /* Lift effect on hover */
 }
-
-/* Background video */
-.background-video {
-  position: fixed; /* Fix the video in the background */
-  top: 0; /* Align to the top */
-  left: 0; /* Align to the left */
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  object-fit: cover; /* Cover the area without distorting the aspect ratio */
-  z-index: -1; /* Send the video behind other content */
-}
-
-/* Style for the content area */
-.content {
-  position: relative; /* Required for absolute positioning of the video */
-  z-index: 1; /* Bring the content above the video */
-  color: white; /* Optional: Change text color for readability */
-}
-
-
-
-/* Additional styles for other elements (like header, footer) can go here */
-
 :root {
   --login-container-opacity: 0.1; /* Set the default opacity value */
 }
-
-
 h1 {
-  font-size: 50px;;
+  font-size: 40px;;
   text-align: center;
-  font-weight: bold;
 }
-
 .form-group {
   margin-bottom: 15px;
-  font-size: 16px;
+  font-size: 14px;
 }
 .login-container form {
   display: flex;
@@ -111,12 +85,13 @@ h1 {
 }
 
 .form-control.ng-touched.ng-valid {
-  border-color: green; /* Green border for valid fields */
+  border-color: rgb(42, 184, 42); /* Green border for valid fields */
 }
 
 .text-danger {
   margin-top: 5px;
-  font-size: 12px;
+  font-size: 15px;
+
 }
 
 button[type="submit"] {
@@ -146,8 +121,9 @@ button[type="submit"]::before {
   left: -100%; /* Start off the left side */
   width: 100%;
   height: 100%;
-  background: #28a745; /* The sliding green background */
-  transition: left 0.3s ease; /* Smooth transition for sliding effect */
+  background: linear-gradient(90deg,#007bff, #60c077); /* Gradient background */
+  color: white;
+  transition: background-color 0.3s ease, transform 0.3s ease;
   z-index: 0; /* Ensure background is below text */
 }
 
@@ -184,7 +160,10 @@ button[type="submit"]:hover .hover-text {
 }
 
 .alert {
-  margin-top: 20px;
+  margin-top: 20px; /* Retain top margin */
+  margin-left: auto;  /* Auto margin on left */
+  margin-right: auto; /* Auto margin on right */
+  width: fit-content;  /* Adjusts the width to fit the content */
 }
 
 main.content {
@@ -200,42 +179,18 @@ main.content {
   color: rgba(0, 0, 0, 0.85); /* Text color for contrast (optional) */
 }
 
-
-.footer {
-  background-color: #1c2331;
-  color: white;
-  width: 100%;
-  height: 60px; /* Fixed height */
-  margin-top: auto; /* Push the footer to the bottom */
-}
-
-:host {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh; /* Ensure full viewport height */
-  margin: 0;
-}
-
-
-
-.form-group {
-  margin-bottom: 20px; /* Equal spacing between each form group */
-}
-
-
-
 .text-danger {
   margin-top: 15px;
-  font-size: 20px; /* Increased font size for better visibility */
+  font-size: 15px; /* Increased font size for better visibility */
   color: red; /* Ensure the text color is red */
 }
-
-
 
 h1 {
   text-align: center;
   padding: 30px;
+  font-family: 'Roboto', sans-serif; /* Replace 'Roboto' with your imported font */
 }
+
 
 /* Form Group and Control Styles */
 .form-group {
@@ -243,14 +198,14 @@ h1 {
   flex-direction: column; /* Stack label and input vertically */
   gap: 5px; /* Space between label and input */
   font-weight: bold;
+
 }
-
-
 .form-control:focus {
   outline: none;
-  border-color: #007bff; /* Focus color */
-  box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+  border-color: #000000; /* Focus color */
+  box-shadow: 0 0 5px rgba(109, 226, 138, 0.3);
 }
+
 
 /* Button Styles */
 button[type="submit"] {
@@ -260,16 +215,12 @@ button[type="submit"] {
   font-weight: bold;
   border: none;
   border-radius: 5px;
-  background: linear-gradient(90deg, #007bff, #60c077); /* Gradient background */
+  background: linear-gradient(90deg, #60c077, #007bff); /* Gradient background */
   color: white;
   transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transition */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow effect */
 }
 
-button[type="submit"]:hover {
-  background: linear-gradient(90deg, #60c077, #007bff); /* Reverse gradient on hover */
-  transform: translateY(-3px); /* Slight lift */
-}
 
 button[type="submit"]:disabled {
   background-color: #ccc; /* Greyed out style for disabled button */
@@ -278,25 +229,257 @@ button[type="submit"]:disabled {
 
 
 
-/* Footer Style */
-.footer {
-  background-color: #1c2331;
-  color: white;
-  width: 100%;
-  height: 60px; /* Fixed height */
-  margin-top: auto; /* Push the footer to the bottom */
-}
-
-/* Overall Layout */
-:host {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh; /* Ensure full viewport height */
-  margin: 0;
-}
 .login-image {
   width: 150px; /* Set to a normal icon size */
   height: 150px; /* Set to a normal icon size */
   margin: auto; /* Center the image and add space below */
   display: block; /* Centering in the container */
+}
+
+
+
+
+
+
+.keyboard h1 {
+  display: flex;
+  flex-wrap: wrap; /* Allow wrapping to a new line */
+  justify-content: center; /* Center the text */
+}
+
+.key {
+  display: inline-block;
+  margin: 0 2px; /* Add space between keys */
+  font-size: 24px; /* Adjust font size as needed */
+  transition: transform 0.2s;
+}
+
+
+@media (max-width: 600px) { /* Target mobile devices */
+  .keyboard h1 {
+    font-size: 18px; /* Adjust font size for smaller screens */
+    line-height: 1.5; /* Adjust line spacing */
+  }
+}
+
+
+
+
+
+/* Keyframe Animations */
+@keyframes pressDown1 {
+  30%, 40%, 100% {
+    transform: translateY(0);
+  }
+  35% {
+    transform: translateY(10px);
+  }
+}
+
+@keyframes pressDown2 {
+  70%, 80%, 100% {
+    transform: translateY(0);
+  }
+  75% {
+    transform: translateY(10px);
+  }
+}
+
+@keyframes pressDown3 {
+  30%, 40%, 100% {
+    transform: translateY(0);
+  }
+  35% {
+    transform: translateY(10px);
+  }
+}
+
+@keyframes pressDown4 {
+  40%, 50%, 100% {
+    transform: translateY(0);
+  }
+  45% {
+    transform: translateY(10px);
+  }
+}
+
+@keyframes pressDown5 {
+  20%, 30%, 100% {
+    transform: translateY(0);
+  }
+  25% {
+    transform: translateY(10px);
+  }
+}
+
+@keyframes pressDown6 {
+  60%, 70%, 100% {
+    transform: translateY(0);
+  }
+  65% {
+    transform: translateY(10px);
+  }
+}
+
+@keyframes pressDown7 {
+  10%, 20%, 100% {
+    transform: translateY(0);
+  }
+  15% {
+    transform: translateY(10px);
+  }
+}
+
+@keyframes pressDown8 {
+  35%, 45%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(10px);
+  }
+}
+
+/* Applying Animations */
+.key:nth-child(1) {
+  animation: pressDown1 5s infinite;
+}
+
+.key:nth-child(2) {
+  animation: pressDown2 6s infinite;
+}
+
+.key:nth-child(3) {
+  animation: pressDown3 7s infinite;
+}
+
+.key:nth-child(4) {
+  animation: pressDown4 8s infinite;
+}
+
+.key:nth-child(5) {
+  animation: pressDown5 9s infinite;
+}
+
+.key:nth-child(6) {
+  animation: pressDown6 5s infinite;
+}
+
+.key:nth-child(7) {
+  animation: pressDown7 5s infinite;
+}
+
+.key:nth-child(8) {
+  animation: pressDown8 6s infinite;
+}
+
+.key:nth-child(9) {
+  animation: pressDown1 7s infinite;
+}
+
+.key:nth-child(10) {
+  animation: pressDown2 8s infinite;
+}
+
+.key:nth-child(11) {
+  animation: pressDown3 9s infinite;
+}
+
+
+
+
+
+
+button i {
+  font-size: 0.7em; /* Initial size of the eye icon */
+  transition: color 0.3s ease, transform 0.3s ease; /* Smooth transition for color and scaling */
+}
+
+button:hover i {
+  color: #007bff;  /* Change color on hover */
+  transform: scale(1.1); /* Slightly enlarge the icon */
+}
+
+button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+button i {
+  font-size: 1.2rem; /* Adjust the icon size */
+}
+
+
+.input-group {
+  position: relative;
+}
+
+.input-group-append button {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.signup-link {
+  display: inline-block;
+  padding: 8px 16px;  /* Add padding to make it look like a button */
+  background-color: transparent;
+  color: #349eff;  /* Sign up link color */
+  font-weight: bold;
+
+  border-radius: 5px;  /* Rounded corners */
+  text-decoration: none;  /* Remove underline */
+  transition: background-color 0.3s ease, color 0.3s ease;  /* Smooth transition for background and text color */
+}
+
+.signup-link:hover {
+  background-color: #349eff;  /* Blue background on hover */
+  color: white;  /* Change text color to white when hovered */
+  border-color: #349eff;  /* Maintain border color */
+}
+
+.signup-link:active {
+  transform: scale(0.98);  /* Add a small scale effect when clicked */
+}
+
+.signup-link:focus {
+  outline: none;  /* Remove focus outline */
+  box-shadow: 0 0 0 2px rgba(52, 158, 255, 0.5);  /* Add a subtle focus shadow */
+}
+
+form {
+  margin-bottom: 40px; /* Adjust the value to control the gap */
 }

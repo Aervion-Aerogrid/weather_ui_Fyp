@@ -4,7 +4,7 @@
   padding: 10px; /* Optional: Add padding for spacing */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: Add a subtle shadow */
   border: 1px solid #6de908; /* Optional: Add a border */
-  background-color: #e9e515; /* Optional: Background color */
+
   overflow: hidden; /* Prevent overflow if SVG exceeds container */
 }
 

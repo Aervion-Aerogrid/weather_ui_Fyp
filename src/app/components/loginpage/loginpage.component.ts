@@ -16,6 +16,8 @@ export class LoginpageComponent {
   loginError: string | null = null;
   showPinModal: boolean = false;  // Flag to control modal visibility
   isLoading: boolean = false;
+  passwordVisible: boolean = false;
+  pinVerified: boolean = false;
   constructor(
     private pinGuard: PinGuard,
     private router: Router,
@@ -29,6 +31,7 @@ export class LoginpageComponent {
   }
 
   login() {
+
     this.isLoading = true;
 
     // Simulate a 10-second delay for the loading state
@@ -36,7 +39,7 @@ export class LoginpageComponent {
       // Your login logic goes here
       this.isLoading = false;
       // Optionally, handle login success or error here
-    }, 10000); //
+    }, 12000); //
     // Sanitize username and password to prevent XSS and other injection attacks
     const sanitizedUsername = this.sanitizer.sanitize(SecurityContext.HTML, this.username);
     const sanitizedPassword = this.sanitizer.sanitize(SecurityContext.HTML, this.password);
@@ -48,7 +51,7 @@ export class LoginpageComponent {
           console.log('Login successful'); // Log success
           this.router.navigate(['/homepage']); // Redirect to home or another page
         } else {
-          console.log('Login failed, invalid credentials'); // Log invalid credentials case
+          //console.log('Login failed, invalid credentials'); // Log invalid credentials case
           this.loginError = 'Invalid credentials. Please try again.';
         }
       },
@@ -82,16 +85,19 @@ validatePassword() {
     this.showPinModal = true;  // Show the PIN modal
   }
 
-  // Handle PIN verification result
-  onPinVerified(isVerified: boolean) {
-    if (isVerified) {
-      // If PIN is correct, set the PIN in PinGuard and navigate to the signup page
-      this.pinGuard.setPin(environment.secretPin);  // Store the correct PIN
-      this.showPinModal = false;  // Close the PIN modal
-      this.router.navigate(['/signup']);  // Navigate to signup page
-    } else {
-      // If PIN is incorrect, keep the modal open and show an error message
-      this.showPinModal = true;  // Show the modal again for re-entry
-    }
+ // Handle the result of the PIN verification
+ onPinVerified(isVerified: boolean) {
+  if (isVerified) {
+    this.pinVerified = true;
+    this.pinGuard.setPin(environment.secretPin);  // Store the correct PIN
+    this.showPinModal = false;  // Close the PIN modal
+    this.router.navigate(['/signup']);  // Navigate to signup page
+  } else {
+    this.pinVerified = false;
+    this.showPinModal = true;  // Keep the modal open for re-entry
+  }
+}
+  togglePasswordVisibility() {
+    this.passwordVisible = !this.passwordVisible;
   }
 }

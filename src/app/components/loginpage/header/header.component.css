@@ -31,9 +31,9 @@
 }
 
 .license-text {
-  margin-top: 10px; /* Space above the license text */
-  font-size: 16px; /* Font size for the license text */
-  font-weight: bold; /* Bold text */
-  color: #333; /* Text color */
-  position: relative; /* Keep text fixed in place */
+  font-family: 'Roboto', sans-serif; /* Replace with your preferred font */
+  font-size: 14px; /* Adjust the font size if needed */
+  color: #888; /* You can change the text color */
+  text-align: center; /* Center-align the text */
+  padding: 20px 0; /* Add some padding for better spacing */
 }

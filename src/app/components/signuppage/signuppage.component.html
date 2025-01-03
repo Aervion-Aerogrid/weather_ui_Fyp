@@ -2,10 +2,38 @@
   <a routerLink="/login" class="back-arrow" title="Go back to Login">
     <i class="bi bi-arrow-left bold-icon"></i>
   </a>
+  <video autoplay loop muted class="background-video">
+    <source src="../../../assets/icons/signup.mp4" type="video/mp4" />
+    Your browser does not support the video tag.
+  </video>
   <div class="login-container">
-    <img src="../../../assets/icons/aervion.jpg" alt="Login Image" class="login-image">
+    <img src="../../../assets/icons/aervion-removebg-preview.png" alt="Login Image" class="login-image">
 
-    <h1>Create Admin Account</h1>
+    <div class="keyboard">
+      <h1>
+        <span class="key-group">
+          <span class="key">C</span>
+          <span class="key">R</span>
+          <span class="key">E</span>
+          <span class="key">A</span>
+          <span class="key">T</span>
+          <span class="key">E</span>
+          <span class="key">&nbsp;</span> <!-- Add space between words -->
+        </span>
+        <br class="mobile-break" /> <!-- Line break for mobile -->
+        <span class="key-group">
+          <span class="key">A</span>
+          <span class="key">C</span>
+          <span class="key">C</span>
+          <span class="key">O</span>
+          <span class="key">U</span>
+          <span class="key">N</span>
+          <span class="key">T</span>
+        </span>
+      </h1>
+    </div>
+
+
 
     <form (ngSubmit)="onSubmit()" #signupForm="ngForm" novalidate>
       <div class="form-group">
@@ -19,7 +47,7 @@
           #usernameField="ngModel"
           required
           minlength="6"
-          placeholder="Enter your username"
+          placeholder="Enter Username"
           pattern="^[a-zA-Z0-9 ]+$"  >
 
         <div *ngIf="usernameField.invalid && usernameField.touched" class="text-danger">
@@ -40,7 +68,7 @@
           #passwordField="ngModel"
           required
           minlength="6"
-          placeholder="Enter your password"
+          placeholder="Enter Password"
           pattern="^(?=(.*\d){3})(?!.*[^a-zA-Z0-9]).{6,}$"  >
 
         <div *ngIf="passwordField.invalid && passwordField.touched" class="text-danger">
@@ -61,7 +89,7 @@
           #confirmPasswordField="ngModel"
           required
           [ngClass]="{'is-invalid': confirmPasswordField.touched && confirmPasswordField.invalid && confirmPassword !== admin.password}"
-          placeholder="Confirm your password">
+          placeholder="Confirm Password">
         <div *ngIf="confirmPasswordField.invalid && confirmPasswordField.touched" class="text-danger">
           <small *ngIf="confirmPasswordField.errors?.['required']">Confirm Password is required.</small>
           <small *ngIf="confirmPassword !== admin.password">Passwords do not match.</small>
@@ -97,6 +125,6 @@
       </button>
     </form>
   </div>
+  <app-header></app-header>
 </main>
 
-<app-footerpage></app-footerpage>

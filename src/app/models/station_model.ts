@@ -1,12 +1,19 @@
 export interface StationData {
+ Station_ID: number;
  Title: string;
- Longitude: number;
  Latitude: number;
+ Longitude: number;
  Temperature: number;
+ Station_pressure: number;
+ Sea_level_pressure: number;
  Humidity:number;
- High_cloud: number;
- Low_cloud:number;
- Mid_cloud:number;
- windSpeed_windDirection:string;
+ High_clouds: number;
+ Low_clouds:number;
+ Mid_clouds:number;
+ Wind_combined:string;
  Sky_cover:number;
+ Dew_point:number;
+ Wind_speed:number;
+ Wind_direction:number;
+ Precipitation_rate:number;
 }

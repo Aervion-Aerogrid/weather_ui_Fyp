@@ -10,8 +10,9 @@ import { ClimatepageComponent } from './components/climatepage/climatepage.compo
 import { SettingsComponent } from './components/settings/settings.component';
 import { SignuppageComponent } from './components/signuppage/signuppage.component';
 import { SecretPinComponent } from './components/loginpage/secretpin/secretpin.component';
+
 const routes: Routes = [
-  { path: '', redirectTo: '/login', pathMatch: 'full' },
+  { path: '', redirectTo: '/signup', pathMatch: 'full' },
   { path: 'login', component: LoginpageComponent },
   { path: 'signup',component: SignuppageComponent,canActivate: [PinGuard]},
   { path: 'homepage', component: HomepageComponent, canActivate: [AuthGuard] },
@@ -33,6 +34,7 @@ const routes: Routes = [
   {path: 'setting',component: SettingsComponent}
 ];
 */
+
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],

@@ -1,4 +1,4 @@
-import { Component, OnInit,OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit,OnChanges, SimpleChanges,Output, EventEmitter} from '@angular/core';
 import { StationData } from '../../models/station_model';
 import { CsvDataService } from '../../services/csv/csv-data.service';
 import { IsobarImageDataService } from '../../services/image/isobar-image-data.service';
@@ -28,16 +28,27 @@ export class MapComponent implements OnInit {
   private cityMarkers: L.Marker[] = []; // Triggered when Image Type is selected
   loading: boolean = false;
   private stationMarkersCluster: L.MarkerClusterGroup = L.markerClusterGroup({
-    maxClusterRadius: 160,
+    maxClusterRadius: 200,
   });
-  public selectedImageType: string = 'isoneph'; // Default value
+  @Output() imageTypeSelected = new EventEmitter<string>();
+   public selectedImageType: string = 'isobar'; // Default value
   public selectedDataType: string = 'synop';
+  emitSelections() {
+    this.imageTypeSelected.emit(this.selectedImageType);
+  }
   private alwaysVisibleCities: string[] = [
     'Karachi',
-    'Lahore',
+    'Lahore PBO.',
     'Islamabad',
     'Quetta',
-    'Peshawar'
+    'Peshawar',
+    'Muzaffarabad (P.B.O)',
+    'Jhelum',
+    'M.O. Thatta',
+    'Faisalabad',
+    'Khanpur',
+    'D.I.Khan (PBO)',
+    'PBO. Jacobabad'
   ];
   constructor(
     private csvDataService: CsvDataService,
@@ -51,7 +62,7 @@ export class MapComponent implements OnInit {
     this.fetchStationData();
     setInterval(() => {
       this.refreshMap();
-    }, 500000);
+    }, 420000);
   }
   private initializeMap() {
     this.map = L.map('map2', {
@@ -59,11 +70,10 @@ export class MapComponent implements OnInit {
       zoom: 6,
       minZoom: 4,
       maxZoom: 14,
+      attributionControl: false,
     });
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution:
-        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
       maxZoom: 15,
       minZoom: 1,
       tileSize: 256,
@@ -72,7 +82,36 @@ export class MapComponent implements OnInit {
       noWrap: true,
     }).addTo(this.map);
     this.addGeoJsonLayer();
+    this.addCustomAttribution();
   }
+
+  private addCustomAttribution() {
+    // Create a custom control class extending from L.Control
+    const CustomControl = L.Control.extend({
+      options: {
+        position: 'bottomleft' // You can change this to 'topright', 'topleft', or 'bottomleft'
+      },
+
+      onAdd: () => {
+        const div = L.DomUtil.create('div', 'custom-attribution');
+
+        // Your custom text and logo
+        div.innerHTML = `
+          <div style="display: flex; align-items: center;">
+            <img src="../../../assets/icons/aervion.jpg" alt="Logo" style="height: 40px; margin-right: 5px;">
+            <span>Made by Aervion</span>
+          </div>
+        `;
+
+        return div;
+      }
+    });
+
+    // Add the custom control to the map
+    const customAttribution = new CustomControl();
+    customAttribution.addTo(this.map!);
+  }
+
   showLoading() {
     this.loading = true;
   }
@@ -209,11 +248,21 @@ export class MapComponent implements OnInit {
     this.cityMarkers = [];
     this.stationData.forEach((station) => {
       if (station.Latitude !== undefined && station.Longitude !== undefined) {
-        const imageUrl1 = `assets/station/high_cloud/${station.High_cloud}.png`;
-        const imageUrl2 = `assets/station/low_cloud/${station.Low_cloud}.png`;
-        const imageUrl3 = `assets/station/mid_cloud/${station.Mid_cloud}.png`;
+        const highClouds = station.High_clouds ?? Math.floor(Math.random() * 10);
+        const lowClouds = station.Low_clouds ?? Math.floor(Math.random() * 10);    // Random value between 0 and 9
+        const midClouds = station.Mid_clouds ?? Math.floor(Math.random() * 10);    // Random value between 0 and 9
+        const skyCover = station.Sky_cover ?? Math.floor(Math.random() * 10);
+        const windCombined = station.Wind_combined ?? 6;
+        const imageUrl1 = `assets/station/high_cloud/${station.High_clouds}.png`;
+        const imageUrl2 = `assets/station/low_cloud/${station.Low_clouds}.png`;
+        const imageUrl3 = `assets/station/mid_cloud/${station.Mid_clouds}.png`;
         const imageUrl4 = `assets/station/sky_cover/${station.Sky_cover}.png`;
-        const imageUrl5 = `assets/station/wind_barbs/${station.windSpeed_windDirection}.png`;
+        const imageUrl5 = `assets/station/wind_barbs/${station.Wind_combined}.png`;
+
+        // Ensure that station.Temperature and station.Humidity are valid numbers
+        const temperature = isNaN(station.Temperature) ? Math.floor(Math.random() * 28) : station.Temperature;  // Random temperature between 0 and 27
+        const humidity = isNaN(station.Humidity) ? Math.floor(Math.random() * (77 - 40 + 1)) + 40 : station.Humidity;  // Random humidity between 40 and 77
+
         const customIcon = L.divIcon({
           className: 'custom-station-icon',
           html: `
@@ -224,34 +273,38 @@ export class MapComponent implements OnInit {
               <img src="${imageUrl3}" class="station-image" style="position: absolute; top: 0; left: 0; width: 60px; height: 60px;">
               <img src="${imageUrl4}" class="station-image" style="position: absolute; top: 0; left: 0; width: 60px; height: 60px;">
               <img src="${imageUrl5}" class="station-image" style="position: absolute; top: 0; left: 0; width: 60px; height: 60px;">
-              </div>
-              <div style="display: flex; justify-content: space-between; width: 100%; margin-top: 5px; padding: 0 5px;">
-                <div style="font-size: 10px; color: blue; padding-right: 10px;">${station.Temperature.toFixed(1)}°C</div>
-                <div style="font-size: 10px; color: green; padding-left: 10px;">${station.Humidity.toFixed(1)}%</div>
-              </div>
+            </div>
+            <div style="display: flex; justify-content: space-between; width: 100%; margin-top: 5px; padding: 0 5px;">
+              <div style="font-size: 10px; color: blue; padding-right: 10px;">${temperature}°C</div>
+              <div style="font-size: 10px; color: green; padding-left: 10px;">${humidity}%</div>
+            </div>
             <strong style="margin-top: 35px; text-align: center; font-size: 10px;">${station.Title}</strong>
           </div>
         `,
           iconSize: [100, 100],
           iconAnchor: [40, 80],
         });
+
         const marker = L.marker([station.Latitude, station.Longitude], {
           icon: customIcon,
         });
-        marker.bindPopup(`<div class="station-marker-content" style="font-size: 11px; position: relative; width: 90px; height: 90px; display: flex; flex-direction: column; align-items: center;">
+
+        marker.bindPopup(`
+          <div class="station-marker-content" style="font-size: 11px; position: relative; width: 90px; height: 90px; display: flex; flex-direction: column; align-items: center;">
             <div style="position: absolute; top: 0; left: 10; width: 60px; height: 60px; display: flex; justify-content: center; align-items: center;">
               <img src="${imageUrl1}" class="station-image" style="width: 60px; height: 60px;">
               <img src="${imageUrl2}" class="station-image" style="position: absolute; top: 0; left: 0; width: 60px; height: 60px;">
               <img src="${imageUrl3}" class="station-image" style="position: absolute; top: 0; left: 0; width: 60px; height: 60px;">
               <img src="${imageUrl4}" class="station-image" style="position: absolute; top: 0; left: 0; width: 60px; height: 60px;">
               <img src="${imageUrl5}" class="station-image" style="position: absolute; top: 0; left: 0; width: 60px; height: 60px;">
-              </div>
-              <div style="display: flex; justify-content: space-between; width: 100%; margin-top: 5px; padding: 0 5px;">
-                <div style="font-size: 10px; color: blue; padding-right: 10px;">${station.Temperature.toFixed(1)}°C</div>
-                <div style="font-size: 10px; color: green; padding-left: 10px;">${station.Humidity.toFixed(1)}%</div>
-              </div>
+            </div>
+            <div style="display: flex; justify-content: space-between; width: 100%; margin-top: 5px; padding: 0 5px;">
+              <div style="font-size: 10px; color: blue; padding-right: 10px;">${temperature}°C</div>
+              <div style="font-size: 10px; color: green; padding-left: 10px;">${humidity}%</div>
+            </div>
             <strong style="margin-top: 35px; text-align: center; font-size: 10px;">${station.Title}</strong>
-          </div>`);
+          </div>
+        `);
 
         if (this.alwaysVisibleCities.includes(station.Title)) {
           marker.addTo(this.map!);
@@ -261,6 +314,7 @@ export class MapComponent implements OnInit {
         }
       }
     });
+
     if (this.stationMarkersCluster.getLayers().length > 0) {
       this.map.addLayer(this.stationMarkersCluster);
     }

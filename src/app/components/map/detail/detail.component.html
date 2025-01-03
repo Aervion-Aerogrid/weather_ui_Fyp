@@ -1,0 +1,71 @@
+<div class="row" style="height: 85vh;">
+  <!-- Station Data Container (Left) -->
+  <div class="col-md-9">
+    <div class="station-container">
+      <h2>Station Details</h2>
+
+      <!-- Display the number of stations -->
+      <p>Number of stations: <strong>{{ stationCount }}</strong></p>
+
+      <!-- Display all stations in cards with scrollbar -->
+      <div class="row mt-3" style="max-height: 660px; overflow-y: auto;">
+        <div class="col-md-6" *ngFor="let station of stations; let i = index" #stationRef>
+          <div class="card mb-3 station-card" (click)="selectStation(station)">
+            <div class="card-body">
+              <!-- Live Status Icon -->
+              <div class="live-status">
+                <span class="live-dot"></span>
+                <span>Live</span>
+              </div>
+
+              <h5 class="card-title">
+                {{ station.Title }}
+              </h5>
+              <p><strong>Latitude:</strong> {{ station.Latitude }}</p>
+              <p><strong>Longitude:</strong> {{ station.Longitude }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- New Container (Right) -->
+  <div class="col-md-3">
+    <div class="new-container">
+      <h2>Additional Information</h2>
+      <!-- Add any content for the right container here -->
+      <p>Here you can add more content or features for the right section.</p>
+
+      <!-- Station Details Card moved here -->
+      <div *ngIf="selectedStation" class="card mt-9">
+        <div class="card-body">
+          <h4>Station Details</h4>
+          <h5>{{ selectedStation.Title }}</h5>
+          <p><strong>ID:</strong> {{ selectedStation.Station_ID}}</p>
+          <p><strong>Latitude:</strong> {{ selectedStation.Latitude }}</p>
+          <p><strong>Longitude:</strong> {{ selectedStation.Longitude }}</p>
+          <p><strong>Temperature:</strong> {{ selectedStation.Temperature }}°C</p>
+          <p><strong>Humidity:</strong> {{ selectedStation.Humidity }}%</p>
+          <p><strong>Pressure:</strong> {{ selectedStation.Station_pressure}}</p>
+          <p><strong>Sea Pressure:</strong> {{ selectedStation.Sea_level_pressure}}</p>
+          <p><strong>Wind Speed/Direction:</strong> {{ selectedStation.Wind_combined }}</p>
+          <p><strong>Sky Cover:</strong> {{ selectedStation.Sky_cover }}</p>
+          <p><strong>Dew Point:</strong> {{ selectedStation.Dew_point }}</p>
+          <p><strong>Precipitation rate:</strong> {{ selectedStation.Precipitation_rate }}</p>
+        </div>
+      </div>
+
+      <!-- Future Work card -->
+      <div class="card mt-5">
+        <div class="card-body">
+          <h5 class="card-title">Future Work</h5>
+          <p>Work on enhancing the station data view and adding more interactivity for users.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
