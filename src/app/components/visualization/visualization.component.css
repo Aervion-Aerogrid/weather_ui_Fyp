@@ -2,12 +2,6 @@
 
 
 
-main.content {
-  flex: 1; /* Take up remaining space */
-  overflow-y: auto; /* Enable scrolling if content exceeds viewport */
-  padding: 15px; /* Adjust as needed */
-  width: 100%;
-}
 
 
 
@@ -22,41 +16,6 @@ main.content {
   opacity: 0.8; /* Make the icon slightly transparent on hover */
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-.drawer-button {
-  background-color: transparent;
-  border: none;
-  padding: 0;
-  margin: 0;
-}
-
-.hamburger-icon {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  width: 20px; /* Adjust width as needed */
-  height: 15px; /* Adjust height as needed */
-}
-
-.line {
-  width: 20px; /* Match width with .hamburger-icon */
-  height: 3px; /* Line thickness */
-  background-color: black; /* Color of the lines */
-}
-
-
-
 /* Optional: Add some spacing to the button */
 .drawer-button {
   margin-right: 20px;
@@ -65,10 +24,6 @@ main.content {
   border: none;
   padding: 0;
 }
-
-
-
-
 
 
 
@@ -84,6 +39,7 @@ main.content {
   flex: 1; /* Take up remaining space */
   overflow-y: auto; /* Enable scrolling if content exceeds viewport */
   padding: 20px; /* Adjust as needed */
+  width: 100%;
 }
 
 .footer {
@@ -93,6 +49,14 @@ main.content {
   height: 60px; /* Fixed height */
   margin-top: auto; /* Push the footer to the bottom */
 }
+
+
+
+
+
+
+
+
 
 
 

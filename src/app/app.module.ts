@@ -34,8 +34,11 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { SecretPinComponent } from './components/loginpage/secretpin/secretpin.component';
 import { DetailComponent } from './components/map/detail/detail.component';
 import { ImageDownloadComponent } from './components/map/image-download/image-download.component';
-
-
+import { TempBarComponent } from './components/temp-bar/temp-bar.component';
+import { CanvasJSAngularChartsModule } from '@canvasjs/angular-charts';
+import { ForcastComponent } from './components/forcast/forcast.component';
+import { RouterModule } from '@angular/router';
+import { MatSliderModule } from '@angular/material/slider';
 
 
 @NgModule({
@@ -57,8 +60,8 @@ import { ImageDownloadComponent } from './components/map/image-download/image-do
     SecretPinComponent,
     DetailComponent,
     ImageDownloadComponent,
-
-
+    TempBarComponent,
+    ForcastComponent,
   ],
   imports: [
     BrowserModule,
@@ -77,7 +80,10 @@ import { ImageDownloadComponent } from './components/map/image-download/image-do
     MatSelectModule,
     MatOptionModule,
     MatSlideToggleModule,
+    RouterModule,
     MatButtonModule,
+    CanvasJSAngularChartsModule,
+    MatSliderModule
   ],
   providers: [CsvDataService, IsobarImageDataService, AuthService],
   bootstrap: [AppComponent],

@@ -16,10 +16,10 @@ const routes: Routes = [
   { path: 'login', component: LoginpageComponent },
   { path: 'signup',component: SignuppageComponent,canActivate: [PinGuard]},
   { path: 'homepage', component: HomepageComponent, canActivate: [AuthGuard] },
-  { path: 'visualization', component: VisualizationComponent, canActivate: [AuthGuard] },
-  { path: 'gis', component: GisComponent, canActivate: [AuthGuard] },
-  {path :'climate',component: ClimatepageComponent,canActivate: [AuthGuard] },
-  {path: 'setting',component: SettingsComponent,canActivate: [AuthGuard] },
+ // { path: 'visualization', component: VisualizationComponent, canActivate: [AuthGuard] },
+  //{ path: 'gis', component: GisComponent, canActivate: [AuthGuard] },
+ // {path :'climate',component: ClimatepageComponent,canActivate: [AuthGuard] },
+ // {path: 'setting',component: SettingsComponent,canActivate: [AuthGuard] },
   { path: 'secretpin', component: SecretPinComponent },
 ];
 
@@ -28,13 +28,12 @@ const routes: Routes = [
   { path: '', redirectTo: '/homepage', pathMatch: 'full' }, // Redirect to homepage instead of login
   // { path: 'login', component: LoginpageComponent }, // Temporarily disable login route
   { path: 'homepage', component: HomepageComponent }, // Remove AuthGuard for now
-  { path: 'visualization', component: VisualizationComponent }, // Remove AuthGuard for now
-  { path: 'gis', component: GisComponent }, // Remove AuthGuard for now
-  {path :'climate',component: ClimatepageComponent},
-  {path: 'setting',component: SettingsComponent}
+//  { path: 'visualization', component: VisualizationComponent }, // Remove AuthGuard for now
+  //{ path: 'gis', component: GisComponent }, // Remove AuthGuard for now
+//  {path :'climate',component: ClimatepageComponent},
+ // {path: 'setting',component: SettingsComponent}
 ];
 */
-
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],

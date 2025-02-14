@@ -20,7 +20,8 @@
               "@deck.gl/layers",
               "mapbox-gl",
               "earcut",
-              "leaflet.markercluster"
+              "leaflet.markercluster",
+              "@canvasjs/angular-charts"
             ],
             "outputPath": "dist/weather",
             "index": "src/index.html",

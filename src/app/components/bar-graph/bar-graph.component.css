@@ -1,16 +1,109 @@
 .chart-container {
-  width: 390px; /* Set a fixed smaller width for the container */
-  height: 390px; /* Set a fixed smaller height for the container */
-  padding: 10px; /* Optional: Add padding for spacing */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: Add a subtle shadow */
-  border: 1px solid #6de908; /* Optional: Add a border */
+  width: 650px;
+  height: 750px;
+  padding: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  margin: 50px auto; /* Add some margin to prevent overlap */
+  position: relative;
+  top: 0; /* Remove vertical centering */
+  transform: none; /* Remove transform for better layout control */
+  display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center all the contents inside the container */
+    justify-content: center;
 
-  overflow: hidden; /* Prevent overflow if SVG exceeds container */
+}
+.city-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr); /* 5 columns */
+  gap: 10px; /* Space between grid items */
+  margin-top: 10px;
+}
+.tooltip {
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  padding: 5px;
+  border-radius: 5px;
+  display: none;
+  pointer-events: none; /* Prevent tooltip from interfering with mouse events */
+}
+
+.city-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 14px;
 }
 
 .chart-container svg {
-  width: 100%; /* Make SVG responsive to container width */
-  height: 100%; /* Ensure SVG fills the container height */
-  object-fit: contain; /* Ensure the SVG maintains its aspect ratio */
-  display: block; /* Prevent extra space below the SVG */
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.data-toggle {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.data-toggle button {
+  margin: 5px;
+  padding: 10px 15px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.data-toggle button:hover {
+  background-color: #0056b3;
+}
+
+/* Tooltip styling */
+.tooltip {
+  position: absolute;
+  background-color: #000;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 12px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+}
+
+
+.data-toggle {
+  margin-bottom: 20px; /* Space between the buttons and the city selection */
+}
+
+.city-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr); /* Create a 5-column grid */
+  gap: 10px; /* Space between the checkboxes */
+  justify-items: center; /* Center checkboxes within each grid cell */
+  margin-bottom: 20px; /* Space between the city grid and the graph */
+}
+
+.city-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+svg {
+  margin-left: 70px; /* Space between the city grid and the SVG graph */
+  display: block;    /* Make sure the SVG takes up only the necessary width */
+  margin-right: auto;
+  margin-left: auto; /* This will center the SVG */
 }

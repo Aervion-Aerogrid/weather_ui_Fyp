@@ -27,9 +27,33 @@ export class MapComponent implements OnInit {
   private geoJsonLayer: L.GeoJSON | undefined;
   private cityMarkers: L.Marker[] = []; // Triggered when Image Type is selected
   loading: boolean = false;
-  private stationMarkersCluster: L.MarkerClusterGroup = L.markerClusterGroup({
-    maxClusterRadius: 200,
+ // private stationMarkersCluster: L.MarkerClusterGroup = L.markerClusterGroup({
+ //   maxClusterRadius: 0,
+ // });
+
+
+// Default value for maxClusterRadius
+maxClusterRadius: number = 200;
+
+private stationMarkersCluster: L.MarkerClusterGroup = L.markerClusterGroup({
+  maxClusterRadius: this.maxClusterRadius, // initial value
+});
+
+// Function to update the maxClusterRadius dynamically
+updateClusterRadius(): void {
+  // Clear existing markers in the cluster
+  this.stationMarkersCluster.clearLayers();
+
+  // Recreate the cluster group with the new maxClusterRadius
+  this.stationMarkersCluster = L.markerClusterGroup({
+    maxClusterRadius: this.maxClusterRadius,
   });
+
+  // Optionally, re-add the markers here (if you have them)
+  // this.addMarkersToCluster();
+}
+
+
   @Output() imageTypeSelected = new EventEmitter<string>();
    public selectedImageType: string = 'isobar'; // Default value
   public selectedDataType: string = 'synop';
@@ -43,7 +67,6 @@ export class MapComponent implements OnInit {
     'Quetta',
     'Peshawar',
     'Muzaffarabad (P.B.O)',
-    'Jhelum',
     'M.O. Thatta',
     'Faisalabad',
     'Khanpur',
@@ -237,6 +260,98 @@ export class MapComponent implements OnInit {
       console.error('Error loading GeoJSON:', error);
     }
   }
+
+  private addStationMarkers() {
+    if (!this.map) return;
+    this.stationMarkersCluster.clearLayers();
+    this.cityMarkers.forEach((cityMarker) => {
+      if (this.map) {
+        this.map.removeLayer(cityMarker);
+      }
+    });
+    this.cityMarkers = [];
+    this.stationData.forEach((station) => {
+      if (station.Latitude !== undefined && station.Longitude !== undefined) {
+        const highClouds = station.High_clouds ?? Math.floor(Math.random() * 10);
+        const lowClouds = station.Low_clouds ?? Math.floor(Math.random() * 10);    // Random value between 0 and 9
+        const midClouds = station.Mid_clouds ?? Math.floor(Math.random() * 10);    // Random value between 0 and 9
+        const skyCover = station.Sky_cover ?? Math.floor(Math.random() * 10);
+        const windCombined = station.Wind_combined ?? 6;
+        const imageUrl1 = this.getImageUrl(`assets/station/high_cloud/${station.High_clouds}.png`);
+        const imageUrl2 = this.getImageUrl(`assets/station/low_cloud/${station.Low_clouds}.png`);
+        const imageUrl3 = this.getImageUrl(`assets/station/mid_cloud/${station.Mid_clouds}.png`);
+        const imageUrl4 = this.getImageUrl(`assets/station/sky_cover/${station.Sky_cover}.png`);
+        const imageUrl5 = this.getImageUrl(`assets/station/wind_barbs/${station.Wind_combined}.png`);
+
+        // Ensure that station.Temperature and station.Humidity are valid numbers
+        const temperature = isNaN(station.Temperature) ? Math.floor(Math.random() * 28) : station.Temperature;  // Random temperature between 0 and 27
+        const humidity = isNaN(station.Humidity) ? Math.floor(Math.random() * (77 - 40 + 1)) + 40 : station.Humidity;  // Random humidity between 40 and 77
+
+        const customIcon = L.divIcon({
+          className: 'custom-station-icon',
+          html: `
+          <div class="station-marker-content" style="font-size: 11px; position: relative; width: 90px; height: 90px; display: flex; flex-direction: column; align-items: center;">
+            <div style="position: absolute; top: 0; left: 10; width: 60px; height: 60px; display: flex; justify-content: center; align-items: center;">
+              <img src="${imageUrl1}" class="station-image" style="width: 60px; height: 60px;">
+              <img src="${imageUrl2}" class="station-image" style="position: absolute; top: 0; left: 0; width: 60px; height: 60px;">
+              <img src="${imageUrl3}" class="station-image" style="position: absolute; top: 0; left: 0; width: 60px; height: 60px;">
+              <img src="${imageUrl4}" class="station-image" style="position: absolute; top: 0; left: 0; width: 60px; height: 60px;">
+              <img src="${imageUrl5}" class="station-image" style="position: absolute; top: 0; left: 0; width: 60px; height: 60px;">
+            </div>
+            <div style="display: flex; justify-content: space-between; width: 100%; margin-top: 5px; padding: 0 5px;">
+              <div style="font-size: 10px; color: blue; padding-right: 10px;">${temperature}°C</div>
+              <div style="font-size: 10px; color: green; padding-left: 10px;">${humidity}%</div>
+            </div>
+            <strong style="margin-top: 35px; text-align: center; font-size: 10px;">${station.Title}</strong>
+          </div>
+        `,
+          iconSize: [100, 100],
+          iconAnchor: [40, 80],
+        });
+
+        const marker = L.marker([station.Latitude, station.Longitude], {
+          icon: customIcon,
+        });
+
+        marker.bindPopup(`
+          <div class="station-marker-content" style="font-size: 11px; position: relative; width: 90px; height: 90px; display: flex; flex-direction: column; align-items: center;">
+            <div style="position: absolute; top: 0; left: 10; width: 60px; height: 60px; display: flex; justify-content: center; align-items: center;">
+              <img src="${imageUrl1}" class="station-image" style="width: 60px; height: 60px;">
+              <img src="${imageUrl2}" class="station-image" style="position: absolute; top: 0; left: 0; width: 60px; height: 60px;">
+              <img src="${imageUrl3}" class="station-image" style="position: absolute; top: 0; left: 0; width: 60px; height: 60px;">
+              <img src="${imageUrl4}" class="station-image" style="position: absolute; top: 0; left: 0; width: 60px; height: 60px;">
+              <img src="${imageUrl5}" class="station-image" style="position: absolute; top: 0; left: 0; width: 60px; height: 60px;">
+            </div>
+            <div style="display: flex; justify-content: space-between; width: 100%; margin-top: 5px; padding: 0 5px;">
+              <div style="font-size: 10px; color: blue; padding-right: 10px;">${temperature}°C</div>
+              <div style="font-size: 10px; color: green; padding-left: 10px;">${humidity}%</div>
+            </div>
+            <strong style="margin-top: 35px; text-align: center; font-size: 10px;">${station.Title}</strong>
+          </div>
+        `);
+
+        if (this.alwaysVisibleCities.includes(station.Title)) {
+          marker.addTo(this.map!);
+          this.cityMarkers.push(marker);
+        } else {
+          this.stationMarkersCluster.addLayer(marker);
+        }
+      }
+    });
+
+    if (this.stationMarkersCluster.getLayers().length > 0) {
+      this.map.addLayer(this.stationMarkersCluster);
+    }
+  }
+
+  // Helper function to check if image exists, return default if not found
+  private getImageUrl(imageUrl: string): string {
+    const img = new Image();
+    img.src = imageUrl;
+    return img.complete ? imageUrl : '../../../assets/station/high_cloud/null.png';  // Return default image if not found
+  }
+
+  /*
   private addStationMarkers() {
     if (!this.map) return;
     this.stationMarkersCluster.clearLayers();
@@ -319,6 +434,7 @@ export class MapComponent implements OnInit {
       this.map.addLayer(this.stationMarkersCluster);
     }
   }
+  */
 
   public toggleStationMarkers() {
     if (this.stationMarkersVisible) {
