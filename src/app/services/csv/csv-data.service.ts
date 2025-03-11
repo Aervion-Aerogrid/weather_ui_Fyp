@@ -30,7 +30,7 @@ export interface StationData {
 })
 export class CsvDataService {
   private csvUrl = `${environment.apiUrl}csv`; // URL for CSV data
-
+  private csvdecodeUrl = `${environment.apiUrl}csv_decode`; // URL for CSV data
   constructor(private http: HttpClient) {}
 
   // Method to fetch CSV data from the FastAPI backend without caching
@@ -60,6 +60,44 @@ export class CsvDataService {
       }
     });
     return parsedData;
+  }
+  // Method to download CSV file
+  downloadCsv(): void {
+    const urlWithNoCache = `${this.csvUrl}?_=${new Date().getTime()}`;
+    this.http.get(urlWithNoCache, { responseType: 'text' }).subscribe(
+      (data: string) => {
+        const blob = new Blob([data], { type: 'text/csv' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'station_data.csv';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      },
+      (error) => {
+        console.error('Error downloading CSV:', error);
+      }
+    );
+  }
+
+  download_decoded_Csv(): void {
+    const urlWithNoCache = `${this.csvdecodeUrl}?_=${new Date().getTime()}`;
+    this.http.get(urlWithNoCache, { responseType: 'text' }).subscribe(
+      (data: string) => {
+        const blob = new Blob([data], { type: 'text/csv' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'Decoded_data.csv';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      },
+      (error) => {
+        console.error('Error downloading CSV:', error);
+      }
+    );
   }
 
   // Centralized error handling for fetch operations

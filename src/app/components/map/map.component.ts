@@ -2,6 +2,7 @@ import { Component, OnInit,OnChanges, SimpleChanges,Output, EventEmitter} from '
 import { StationData } from '../../models/station_model';
 import { CsvDataService } from '../../services/csv/csv-data.service';
 import { IsobarImageDataService } from '../../services/image/isobar-image-data.service';
+import { HealthApiService } from '../../services/health/health-api.service';
 import { DatatypeService } from '../../services/datatype/datatype.service'
 import * as L from 'leaflet';
 import 'leaflet.markercluster';
@@ -27,31 +28,53 @@ export class MapComponent implements OnInit {
   private geoJsonLayer: L.GeoJSON | undefined;
   private cityMarkers: L.Marker[] = []; // Triggered when Image Type is selected
   loading: boolean = false;
- // private stationMarkersCluster: L.MarkerClusterGroup = L.markerClusterGroup({
- //   maxClusterRadius: 0,
- // });
+  apiStatus = 'Checking...';
+  isApiUp = false;
+  maxClusterRadius: number = 200; // Default value
+  customRadius: number = 100; // Default custom value
+  isCustomSelected: boolean = false;
 
-
-// Default value for maxClusterRadius
-maxClusterRadius: number = 200;
-
-private stationMarkersCluster: L.MarkerClusterGroup = L.markerClusterGroup({
-  maxClusterRadius: this.maxClusterRadius, // initial value
-});
-
-// Function to update the maxClusterRadius dynamically
-updateClusterRadius(): void {
-  // Clear existing markers in the cluster
-  this.stationMarkersCluster.clearLayers();
-
-  // Recreate the cluster group with the new maxClusterRadius
-  this.stationMarkersCluster = L.markerClusterGroup({
-    maxClusterRadius: this.maxClusterRadius,
+  private stationMarkersCluster: L.MarkerClusterGroup = L.markerClusterGroup({
+    maxClusterRadius: 200, // Initial value
   });
 
-  // Optionally, re-add the markers here (if you have them)
-  // this.addMarkersToCluster();
-}
+  // Function to update the maxClusterRadius dynamically
+  updateClusterRadius(value: number): void {
+    this.maxClusterRadius = value;
+
+    // Only recreate the cluster when a new custom value is set
+    if (this.isCustomSelected) {
+      this.rebuildCluster();
+    }
+  }
+
+  // Function to rebuild the cluster with the updated maxClusterRadius
+  private rebuildCluster(): void {
+    this.stationMarkersCluster.clearLayers(); // Clear old markers
+
+    this.stationMarkersCluster = L.markerClusterGroup({
+      maxClusterRadius: this.maxClusterRadius, // Use updated value
+    });
+
+    // Optionally, re-add the markers
+    // this.addMarkersToCluster();
+    this.addStationMarkers();
+  }
+
+  // Select custom option without resetting everything
+  selectCustom(): void {
+    this.isCustomSelected = true;
+    this.updateClusterRadius(this.customRadius);
+  }
+  setClusterRadius(value: number): void {
+    this.maxClusterRadius = value;
+    this.isCustomSelected = false; // Hide slider when predefined values are selected
+    this.rebuildCluster();
+  }
+
+
+
+
 
 
   @Output() imageTypeSelected = new EventEmitter<string>();
@@ -61,22 +84,13 @@ updateClusterRadius(): void {
     this.imageTypeSelected.emit(this.selectedImageType);
   }
   private alwaysVisibleCities: string[] = [
-    'Karachi',
-    'Lahore PBO.',
-    'Islamabad',
-    'Quetta',
-    'Peshawar',
-    'Muzaffarabad (P.B.O)',
-    'M.O. Thatta',
-    'Faisalabad',
-    'Khanpur',
-    'D.I.Khan (PBO)',
-    'PBO. Jacobabad'
+
   ];
   constructor(
     private csvDataService: CsvDataService,
     private isobarImageDataService: IsobarImageDataService,
-    private datatypeService: DatatypeService
+    private datatypeService: DatatypeService,
+    private healthApiService: HealthApiService,
   ) {}
 
   ngOnInit() {
@@ -85,7 +99,9 @@ updateClusterRadius(): void {
     this.fetchStationData();
     setInterval(() => {
       this.refreshMap();
-    }, 420000);
+    }, 42000);
+    this.checkAPIStatus();
+    setInterval(() => this.checkAPIStatus(), 9000);
   }
   private initializeMap() {
     this.map = L.map('map2', {
@@ -107,7 +123,19 @@ updateClusterRadius(): void {
     this.addGeoJsonLayer();
     this.addCustomAttribution();
   }
-
+  checkAPIStatus() {
+    this.healthApiService.checkAPIStatus().subscribe({
+      next: (response) => {
+        this.apiStatus = 'API Online ';
+        this.isApiUp = true;
+      },
+      error: () => {
+        this.apiStatus = 'API Down';
+        this.refreshMap();
+        this.isApiUp = false;
+      }
+    });
+  }
   private addCustomAttribution() {
     // Create a custom control class extending from L.Control
     const CustomControl = L.Control.extend({
@@ -213,6 +241,7 @@ updateClusterRadius(): void {
       }
     );
   }
+
   private addOverlayImage() {
     if (!this.map || !this.pngUrl || !this.overlayBounds) return;
     if (this.imageOverlay) {

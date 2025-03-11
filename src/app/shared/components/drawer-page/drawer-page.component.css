@@ -1,0 +1,124 @@
+/* Drawer container positioned on the right */
+.drawer {
+  position: fixed;
+  top: 0;
+  right: 0; /* Align the drawer to the right side */
+  width: 300px; /* Adjust the width of the drawer */
+  height: 100%;
+  background-color: #f8f9fa;
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1); /* Shadow on the left side of the drawer */
+  transform: translateX(100%); /* Initially hide the drawer off the screen on the right */
+  transition: transform 0.3s ease-in-out;
+  z-index: 1000; /* Ensure the drawer is on top of other elements */
+}
+
+.drawer-open {
+  transform: translateX(0); /* Show the drawer */
+}
+
+.drawer-content {
+  padding: 20px; /* Padding inside the drawer */
+}
+
+.drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px; /* Margin between header and body */
+}
+
+.drawer-title {
+  font-size: 24px; /* Title size */
+  text-align: center; /* Center title */
+}
+
+.drawer-icon {
+  width: 40px; /* Icon size */
+  height: auto; /* Maintain aspect ratio */
+  margin-right: 10px; /* Space between icon and title */
+}
+
+.close-icon {
+  cursor: pointer; /* Pointer cursor for close icon */
+  font-size: 24px; /* Icon size */
+  color: #333; /* Close icon color */
+}
+
+.drawer-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.drawer-link {
+  text-decoration: none; /* Remove underline */
+  padding: 10px 0; /* Vertical padding */
+  color: #333; /* Link color */
+  transition: background-color 0.3s ease; /* Transition effect */
+  text-align: center; /* Center the text */
+}
+
+.drawer-link:hover {
+  background-color: #f0f0f0; /* Hover effect */
+}
+
+.drawer-footer {
+  margin-top: 20px; /* Space above footer */
+  text-align: center; /* Center footer text */
+  font-size: 14px; /* Footer text size */
+  color: #666; /* Footer text color */
+}
+/* Styles for the drawer header */
+.drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Centering content horizontally */
+  margin-bottom: 20px; /* Margin between header and body */
+  position: relative; /* Position relative for positioning close icon */
+}
+
+.close-icon {
+  position: absolute; /* Position absolute to place it at the top */
+  top: 10px; /* Position it 10px from the top */
+  left: 10px; /* Position it 10px from the left */
+  cursor: pointer; /* Pointer cursor for close icon */
+  font-size: 24px; /* Icon size */
+  color: #333; /* Close icon color */
+  transition: color 0.3s ease; /* Change color on hover */
+}
+
+.close-icon:hover {
+  color: #f00; /* Change color on hover */
+}
+
+.drawer-title {
+  display: flex; /* Use flexbox to align items */
+  align-items: center; /* Center vertically */
+  justify-content: center; /* Center horizontally */
+  font-size: 24px; /* Title size */
+}
+
+.drawer-icon {
+  width: 40px; /* Icon size */
+  height: auto; /* Maintain aspect ratio */
+  margin-right: 10px; /* Space between icon and title */
+}
+.drawer-link {
+  display: flex;
+  align-items: center;
+  padding: 10px 15px; /* Adjust padding as necessary */
+}
+
+.drawer-link i {
+  margin-right: 10px; /* Space between icon and text */
+}
+.custom-logout-btn {
+  background-color: green;
+  color: white;
+  border: none;
+  transition: background-color 0.4s ease;
+}
+
+.custom-logout-btn:hover {
+  background-color: red;
+  color: white;
+}

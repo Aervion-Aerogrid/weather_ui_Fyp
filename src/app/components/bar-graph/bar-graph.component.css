@@ -1,3 +1,20 @@
+
+.d-flex {
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Align items vertically */
+  gap: 20px; /* Add space between elements */
+}
+
+.custom-dropdown {
+  width: 350px !important; /* Increase dropdown width */
+}
+
+.mat-select-panel {
+  max-height: 300px !important; /* Increase dropdown scroll length */
+}
+
+
 .chart-container {
   width: 650px;
   height: 750px;

@@ -1,29 +1,36 @@
-<div class="chart-container">
-  <h1>Cities Climate Temperature Data</h1>
-  <div class="data-toggle">
-    <button (click)="setData('daily')">Daily</button>
-    <button (click)="setData('monthly')">Monthly</button>
-    <button (click)="setData('yearly')">Yearly</button>
-  </div>
+<div class="d-flex justify-content-center align-items-center mb-3">
+  <!-- City Selection -->
+  <mat-form-field appearance="outline" class="custom-dropdown">
+    <mat-label>Select City</mat-label>
+    <mat-select [(value)]="selectedCity" (selectionChange)="onCityChange($event)">
+      <mat-option *ngFor="let city of availableCities" [value]="city">
+        {{ city }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <!-- Parameter Selection -->
+  <mat-form-field appearance="outline" class="custom-dropdown">
+    <mat-label>Select Parameter</mat-label>
+    <mat-select [(value)]="selectedParameter" (selectionChange)="onParameterChange($event)">
+      <mat-option *ngFor="let parameter of availableParameters" [value]="parameter">
+        {{ parameter }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
 
 
-  <!-- Select Cities -->
-  <div>
-    <label>Select Cities:</label>
-    <div class="city-grid">
-      <div *ngFor="let city of allCities" class="city-item">
-        <input
-          title= "hi"
-          type="checkbox"
-          [value]="city.city"
-          [checked]="selectedCities.includes(city.city)"
-          (change)="onCitySelectionChange(city.city, $event)"
-        />
-        {{ city.city }} <!-- Display city name -->
-      </div>
-    </div>
-  </div>
+</div>
 
-  <!-- Placeholder for SVG chart (or other graphing components) -->
-  <svg></svg>
+<!-- Chart Container -->
+<div *ngIf="chartOptions?.data">
+  <canvasjs-chart
+    [options]="chartOptions"
+    [styles]="{ width: '100%', height: '460px' }"
+  ></canvasjs-chart>
+</div>
+
+<!-- Error Message for No Data -->
+<div *ngIf="!chartOptions?.data?.length" class="alert alert-warning text-center mt-3">
+  No data available for the selected filters.
 </div>

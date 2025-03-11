@@ -9,7 +9,7 @@ import { environment } from '../../../environments/environment';
 })
 export class IsobarImageDataService {
   private apiUrlImage = `${environment.apiUrl}image-data`;
-
+  private apiSvgImage = `${environment.apiUrl}svg-data`;
   constructor(private http: HttpClient) {}
 
   // Method to fetch specific isobar data with image type as parameter
@@ -30,9 +30,28 @@ export class IsobarImageDataService {
     return this.http.get<any>(this.apiUrlImage, { params, headers }).pipe(catchError(this.handleError));
   }
 
+  // Method to fetch SVG data as text
+  getSvgData(imageType: string): Observable<string> {
+    console.log('Fetching SVG data for:', imageType);
+
+    const params = new HttpParams().set('image_type', imageType);
+       // Set HTTP headers to prevent caching
+    const headers = new HttpHeaders({
+      'Cache-Control': 'no-cache, no-store, must-revalidate', // HTTP 1.1
+      'Pragma': 'no-cache', // HTTP 1.0
+      'Expires': '0' // Proxies
+    });
+    return this.http.get(this.apiSvgImage, { params,headers, responseType: 'text' }).pipe(
+      catchError(this.handleError)
+    );
+  }
+
   // Method to handle HTTP errors
   private handleError(error: any): Observable<never> {
     console.error('An error occurred:', error);
     return throwError(() => new Error('Failed to fetch image data. Please try again later.'));
   }
+
+
+
 }

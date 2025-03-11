@@ -1,8 +1,39 @@
 <!-- Container for heading and text -->
 <app-drawerpage></app-drawerpage>
-<div class="container my-4">
-  <h1>PDM VISUALIZATION TOOLS</h1>
+<div class="container my-4 text-center">
+  <h1>Geo-Visual Analytics</h1>
+
+  <div class="d-flex justify-content-center align-items-center flex-wrap gap-4 mt-3">
+    <div class="d-flex align-items-center">
+      <span class="live-dot" [ngStyle]="{'background-color': isApiUp ? 'green' : 'red'}"></span>
+      <span class="ms-2 fw-bold" [ngClass]="{'text-success': isApiUp, 'text-danger': !isApiUp}">Heatmaps</span>
+    </div>
+
+    <div class="d-flex align-items-center">
+      <span class="live-dot" [ngStyle]="{'background-color': isApiUp ? 'green' : 'red'}"></span>
+      <span class="ms-2 fw-bold" [ngClass]="{'text-success': isApiUp, 'text-danger': !isApiUp}">Isolines</span>
+    </div>
+
+    <div class="d-flex align-items-center">
+      <span class="live-dot" [ngStyle]="{'background-color': isApiUp ? 'green' : 'red'}"></span>
+      <span class="ms-2 fw-bold" [ngClass]="{'text-success': isApiUp, 'text-danger': !isApiUp}">Stations</span>
+    </div>
+
+    <div class="d-flex align-items-center">
+      <span class="live-dot" [ngStyle]="{'background-color': isApiUp ? 'green' : 'red'}"></span>
+      <span class="ms-2 fw-bold" [ngClass]="{'text-success': isApiUp, 'text-danger': !isApiUp}"> Reports</span>
+    </div>
+    <div class="d-flex align-items-center">
+      <span class="live-dot" [ngStyle]="{'background-color': isApiUp ? 'green' : 'red'}"></span>
+      <span class="ms-2 fw-bold" [ngClass]="{'text-success': isApiUp, 'text-danger': !isApiUp}"> Edit Layer</span>
+    </div>
+    <p class="ms-3 mb-0" [ngClass]="{'text-muted': isApiUp, 'text-danger': !isApiUp}">{{ apiStatus }}</p>
+  </div>
+  <p>Updating Every 2:30 hours</p>
 </div>
+
+
+
 
 <div class="container my-2">
     <!-- Progress bar displayed between dropdowns -->
@@ -34,18 +65,49 @@
     </mat-select>
   </mat-form-field>
 
-  <div class="mt-3">
-    <label for="clusterRadiusSlider">Adjust Max Cluster Radius: {{ maxClusterRadius }}</label>
-    <input
-      id="clusterRadiusSlider"
-      type="range"
-      class="form-range"
-      min="0"
-      max="200"
-      step="1"
-      [(ngModel)]="maxClusterRadius"
-      (input)="updateClusterRadius()">
+  <div class="mt-3 text-center">
+    <label class="d-block mb-2">Adjust Max Station Cluster Radius: {{ maxClusterRadius }}</label>
+
+    <div class="d-flex justify-content-center align-items-center gap-4">
+      <!-- Option 1: 0 -->
+      <label class="d-flex align-items-center">
+        <input type="radio" name="clusterRadius" [(ngModel)]="maxClusterRadius" [value]="0" (change)="setClusterRadius(0)">
+        <span class="ms-1">0</span>
+      </label>
+
+      <!-- Option 2: 200 -->
+      <label class="d-flex align-items-center">
+        <input type="radio" name="clusterRadius" [(ngModel)]="maxClusterRadius" [value]="200" (change)="setClusterRadius(200)">
+        <span class="ms-1">200</span>
+      </label>
+
+      <!-- Option 3: Custom -->
+      <label class="d-flex align-items-center">
+        <input type="radio" name="clusterRadius" [checked]="isCustomSelected" (change)="selectCustom()">
+        <span class="ms-1">Custom</span>
+      </label>
+    </div>
+
+    <!-- Show slider only when Custom is selected -->
+    <div *ngIf="isCustomSelected" class="d-flex justify-content-center mt-2">
+      <input
+        id="clusterRadiusSlider"
+        title="Cluster Radius"
+        type="range"
+        class="form-range"
+        min="1"
+        max="200"
+        step="1"
+        [(ngModel)]="customRadius"
+        (input)="updateClusterRadius(customRadius)">
+    </div>
   </div>
+
+
+
+
+
+
 </div>
 
 
@@ -64,7 +126,13 @@
   <button mat-raised-button class="m-1" (click)="toggleGeoJsonLayer()">
     {{ geoJsonLayerVisible ? 'Hide Map' : 'Show Map' }}
   </button>
+  <button mat-raised-button class="btn btn-success m-1" [routerLink]="['/svg-edit']" [queryParams]="{ type: selectedImageType }">
+    Edit Layer
+  </button>
+
+
 </div>
+
 
 <div id="capture-area">
   <div class="container-isotherm">

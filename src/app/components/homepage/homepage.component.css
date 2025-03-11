@@ -52,6 +52,7 @@ main.content {
   flex: 1; /* Take up remaining space */
   overflow-y: auto; /* Enable scrolling if content exceeds viewport */
   padding: 20px; /* Adjust as needed */
+  background-color: #f4f6f9; /* Light gray background */
 }
 
 .footer {

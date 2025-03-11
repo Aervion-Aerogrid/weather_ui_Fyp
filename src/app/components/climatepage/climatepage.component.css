@@ -38,6 +38,26 @@
   padding: 0;
 }
 
+.live-status {
+  display: flex;
+  align-items: center;
+}
+
+.live-dot {
+  width: 10px;
+  height: 10px;
+  background-color: rgb(102, 221, 156);
+  border-radius: 50%;
+  display: inline-block;
+  animation: fadeBlink 1.5s infinite;
+}
+
+/* Blinking Fade Animation */
+@keyframes fadeBlink {
+  0% { opacity: 1; }
+  50% { opacity: 0.3; }
+  100% { opacity: 1; }
+}
 
 
 :host {
@@ -63,3 +83,177 @@ main.content {
 }
 
 
+/* Main Content Styling */
+.content {
+  padding: 16px;
+
+  min-height: 100vh;
+}
+/* Toolbar Styling */
+mat-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  background-color: #1976d2; /* Material Primary Blue */
+  color: white;
+}
+
+mat-toolbar button {
+  margin-right: 10px;
+}
+
+/* Mat Card Styling */
+mat-card {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  transition: 0.3s ease-in-out;
+}
+
+mat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+
+/* Divider Styling */
+mat-divider {
+  margin: 200px 0;
+  height: 5px;
+}
+
+/* Text Styling */
+h1 {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+}
+
+h2 {
+  font-size: 22px;
+  font-weight: bold;
+
+}
+
+p {
+  font-size: 16px;
+  color: #666;
+}
+/* Main Content Styling */
+.content {
+  padding: 16px;
+  background-color: #f4f6f9; /* Light gray background */
+  min-height: 100vh;
+}
+
+/* Header Text Styling */
+h2 {
+  font-size: 28px; /* Increased font size */
+  font-weight: bold;
+  color: #000; /* Changed to black */
+  text-align: center;
+}
+
+/* Mat Card Styling */
+mat-card {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  transition: 0.3s ease-in-out;
+}
+
+mat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Main Content Styling */
+.content {
+  padding: 16px;
+  background-color: #f4f6f9; /* Light gray background */
+  min-height: 100vh;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  border-radius: 8px; /* Rounded corners for a smooth look */
+  transition: box-shadow 0.3s ease-in-out, transform 0.2s ease-in-out;
+}
+
+/* Hover Effect */
+.content:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Stronger shadow on hover */
+  transform: translateY(-4px); /* Slight lift effect */
+}
+
+
+/* Header Text Styling */
+h2 {
+  font-size: 28px; /* Increased font size */
+  font-weight: bold;
+  color: #000; /* Changed to black */
+  text-align: center;
+}
+
+/* Mat Card Styling */
+mat-card {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  transition: 0.3s ease-in-out;
+}
+
+mat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Chart Container */
+.chart-container {
+
+  align-items: center;
+  padding: 20px;
+}
+
+/* Divider Styling */
+mat-divider {
+  margin: 20px 0;
+  background-color: #d1d1d1;
+  height: 2px;
+}
+
+/* Text Styling */
+h1 {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  text-align: center;
+}
+
+p {
+  font-size: 16px;
+  color: #666;
+  text-align: center;
+}
+
+
+/* Divider Styling */
+mat-divider {
+  margin: 20px 0;
+  background-color: #d1d1d1;
+  height: 2px;
+}
+
+/* Text Styling */
+h1 {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  text-align: center;
+}
+
+p {
+  font-size: 16px;
+  color: #666;
+  text-align: center;
+}

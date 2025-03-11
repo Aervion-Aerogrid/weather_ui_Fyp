@@ -110,3 +110,54 @@ canvas {
   background-color: #4caf50; /* Green color */
 }
 
+.text-center {
+  text-align: center;
+}
+
+.d-flex {
+  display: flex;
+}
+
+.justify-content-center {
+  justify-content: center;
+}
+
+.align-items-center {
+  align-items: center;
+}
+
+.gap-4 {
+  gap: 1rem;
+}
+
+.mt-3 {
+  margin-top: 1rem;
+}
+
+.ms-1 {
+  margin-left: 0.25rem;
+}
+
+.mb-2 {
+  margin-bottom: 0.5rem;
+}
+.live-status {
+  display: flex;
+  align-items: center;
+}
+
+.live-dot {
+  width: 10px;
+  height: 10px;
+  background-color: rgb(102, 221, 156);
+  border-radius: 50%;
+  display: inline-block;
+  animation: fadeBlink 1.5s infinite;
+}
+
+/* Blinking Fade Animation */
+@keyframes fadeBlink {
+  0% { opacity: 1; }
+  50% { opacity: 0.3; }
+  100% { opacity: 1; }
+}
