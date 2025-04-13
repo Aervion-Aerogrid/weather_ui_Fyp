@@ -1,38 +1,38 @@
-<app-headerpage></app-headerpage>
+<app-header-page></app-header-page>
+<app-drawer-icon></app-drawer-icon>
 
-<div class="row mx-3 my-3">
-  <div class="col d-flex align-items-center justify-content-start p-3">
-    <button title="drawer" type="button" class="btn btn-light drawer-button" (click)="toggleDrawer()">
-      <img src="../../../assets/icons/menu_icon2.png" alt="Menu Icon" class="menu-icon">
-    </button>
-    <h1 class="ml-2">Menu</h1>
-  </div>
-</div>
+<video autoplay muted loop class="background-video">
+  <source src="../../../assets/icons/ai.mp4" type="video/mp4" />
+  Your browser does not support the video tag.
+</video>
 
-<app-drawerpage></app-drawerpage>
 <main class="content">
-<div class="ask-prompt-container">
-  <h3>ASK WEATHER AI HELPER</h3>
+  <div class="ask-prompt-container">
+    <h3>ASK WEATHER AI HELPER</h3>
 
-  <div class="prompt-input-section">
-    <label for="prompt">Enter a Prompt</label>
-    <input
-      type="text"
-      id="prompt"
-      class="form-control"
-      placeholder="Enter a Prompt"
-      [(ngModel)]="userPrompt"
-    />
-    <button (click)="askAI()" class="btn btn-primary mt-2">Enter a Query</button>
-  </div>
+    <div class="prompt-input-section">
+      <label for="prompt">Enter a Prompt</label>
+      <input
+        type="text"
+        id="prompt"
+        class="form-control"
+        placeholder="Enter a Prompt"
+        [(ngModel)]="userPrompt"
+      />
+      <button (click)="askAI()" class="btn btn-primary mt-2">
+        Enter a Query
+      </button>
+    </div>
 
-  <div class="status-section" *ngIf="isGenerating">
-    <p><i class="bi bi-star"></i> STATUS: Generating Responses......</p>
-  </div>
+    <div class="status-section" *ngIf="isGenerating">
+      <p><i class="bi bi-star"></i> STATUS: Generating Responses......</p>
+    </div>
 
-  <div class="reply-section" *ngIf="aiResponse">
-    <h5>Reply</h5>
-    <div class="reply-box" [innerHTML]="aiResponse"></div>
+    <div class="reply-section" *ngIf="aiResponse">
+      <h5>Reply</h5>
+      <div class="reply-box" [innerHTML]="aiResponse"></div>
+    </div>
   </div>
-</div>
 </main>
+
+<app-footerpage></app-footerpage>

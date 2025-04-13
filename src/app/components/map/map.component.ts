@@ -78,7 +78,7 @@ export class MapComponent implements OnInit {
 
 
   @Output() imageTypeSelected = new EventEmitter<string>();
-   public selectedImageType: string = 'isobar'; // Default value
+   public selectedImageType: string = 'isobars'; // Default value
   public selectedDataType: string = 'synop';
   emitSelections() {
     this.imageTypeSelected.emit(this.selectedImageType);

@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild, AfterViewInit, ChangeDetectorRef } from '@angular/core';
-import { DrawerpageComponent } from '../drawerpage/drawerpage.component';
 import { HealthApiService } from '../../services/health/health-api.service';
 
 @Component({
@@ -7,9 +6,7 @@ import { HealthApiService } from '../../services/health/health-api.service';
   templateUrl: './climatepage.component.html',
   styleUrls: ['./climatepage.component.css']
 })
-export class ClimatepageComponent implements AfterViewInit {
-  @ViewChild(DrawerpageComponent) drawerPageComponent!: DrawerpageComponent;
-
+export class ClimatepageComponent{
   constructor(private healthApiService: HealthApiService, private cdr: ChangeDetectorRef) {}
 
   loading: boolean = false;
@@ -21,15 +18,7 @@ export class ClimatepageComponent implements AfterViewInit {
     this.checkAPIStatus();
   }
 
-  ngAfterViewInit() {
-    if (!this.drawerPageComponent) {
-      console.error('DrawerPageComponent not found!');
-    }
-  }
 
-  toggleDrawer() {
-    this.drawerPageComponent?.toggleDrawer(); // Safe navigation
-  }
 
   checkAPIStatus() {
     this.healthApiService.checkAPIStatus().subscribe({

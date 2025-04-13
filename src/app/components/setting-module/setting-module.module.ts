@@ -10,22 +10,24 @@ import { MatOptionModule } from '@angular/material/core';
 import { SettingModuleRoutingModule } from './setting-module-routing.module';
 import { SettingsComponent } from './settings/settings.component';
 import { SharedModule } from '../../shared/shared.module';
-
+import { MatIconModule } from '@angular/material/icon';
 @NgModule({
   declarations: [
-    SettingsComponent
+    SettingsComponent,
+
   ],
   imports: [
     CommonModule,
     SettingModuleRoutingModule,
     SharedModule,
-    FormsModule, // Ensure this is imported
+    FormsModule,
     MatRadioModule,
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
-    MatOptionModule
+    MatOptionModule,
+    MatIconModule
   ]
 })
 export class SettingModuleModule { }

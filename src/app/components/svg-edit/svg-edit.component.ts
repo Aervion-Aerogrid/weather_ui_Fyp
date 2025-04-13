@@ -12,6 +12,8 @@ import { OnInit } from '@angular/core';
 import { MatSelectChange } from '@angular/material/select';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
+import { NumberDialogComponent } from './number-dialog/number-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-svg-edit',
@@ -19,38 +21,22 @@ import { environment } from '../../../environments/environment';
   styleUrls: ['./svg-edit.component.css'],
 })
 export class SvgEditComponent implements AfterViewInit {
-  @ViewChild(DrawerpageComponent) drawerPageComponent!: DrawerpageComponent;
-  selectedImageType: string = 'isobar'; // Ensure default value
+  selectedImageType: string = 'isobars'; // Ensure default value
+  backgroundImageUrl: string | null = null;
 
-  imageData: any; // Store the fetched image data
-  imageTypes: string[] = ['isobar', 'isotherm']; // Example types
-  apiUrl = `${environment.apiUrl}`;
-  private historyStack: string[] = [];
-  private redoStack: string[] = [];
-  constructor(
-    private renderer: Renderer2,
-    private route: ActivatedRoute,
-    private isobarService: IsobarImageDataService,
-    private http: HttpClient // Inject HttpClient for API calls
-  ) {}
+  loadPngBackground(): void {
+    this.isobarService.getEditingImage().subscribe(
+      (imageBlob: Blob) => {
+        this.backgroundImageUrl = URL.createObjectURL(imageBlob);
+        console.log('PNG background loaded:', this.backgroundImageUrl);
+      },
+      (error) => console.error('Failed to load PNG image:', error)
+    );
+  }
 
-  ngAfterViewInit(): void {
-
-  }
-  ngOnInit(): void {
-    // Get the image type from query params
-    this.route.queryParams.subscribe((params) => {
-      this.selectedImageType = params['type'] || 'isobar';
-      this.loadSvg();
-    });
-  }
-  onImageTypeChange(event: MatSelectChange): void {
-    this.selectedImageType = event.value;
-    console.log('Selected Image Type:', this.selectedImageType); // Debugging
-    this.loadSvg();
-  }
   loadSvg(): void {
     console.log('Loading SVG for:', this.selectedImageType); // Debugging
+
     this.isobarService.getSvgData(this.selectedImageType).subscribe(
       (svgData: string) => {
         if (this.svgContainer?.nativeElement) {
@@ -63,14 +49,59 @@ export class SvgEditComponent implements AfterViewInit {
       (error) => console.error('Failed to load SVG:', error)
     );
   }
- // Save the current SVG state for undo/redo
- private saveState(): void {
-  if (this.svgContainer?.nativeElement) {
-    const svgString = this.getSerializedSvg();
-    this.historyStack.push(svgString);
-    this.redoStack = []; // Clear redo stack when a new change is made
+
+  imageData: any; // Store the fetched image data
+  imageTypes: string[] = [
+    'isobars',
+    'isotherms',
+    'isodrosotherms',
+    'isogons',
+    'isohumes',
+    'isohyets',
+    'isonephs',
+    'isotachs',
+  ]; // Example types
+  apiUrl = `${environment.apiUrl}`;
+  private historyStack: string[] = [];
+  private redoStack: string[] = [];
+  constructor(
+    private renderer: Renderer2,
+    private route: ActivatedRoute,
+    private isobarService: IsobarImageDataService,
+    private http: HttpClient,
+    private dialog: MatDialog
+  ) {}
+
+  ngAfterViewInit(): void {}
+  ngOnInit(): void {
+    // Get the image type from query params
+    this.route.queryParams.subscribe((params) => {
+      this.selectedImageType = params['type'] || 'isobars';
+      this.loadPngBackground(); // Load PNG first
+      this.loadSvg();
+    });
+
   }
-}
+
+
+  onImageTypeChange(event: MatSelectChange): void {
+    this.selectedImageType = event.value;
+    console.log('Selected Image Type:', this.selectedImageType); // Debugging
+    this.loadSvg();
+  }
+
+
+
+
+
+  // Save the current SVG state for undo/redo
+  private saveState(): void {
+    if (this.svgContainer?.nativeElement) {
+      const svgString = this.getSerializedSvg();
+      this.historyStack.push(svgString);
+      this.redoStack = []; // Clear redo stack when a new change is made
+    }
+  }
   // Undo action
   undo(): void {
     if (this.historyStack.length > 1) {
@@ -105,11 +136,11 @@ export class SvgEditComponent implements AfterViewInit {
   private onSvgModified(): void {
     this.saveState();
   }
-// Serialize the current SVG
-private getSerializedSvg(): string {
-  const svgElement = this.svgContainer.nativeElement;
-  return new XMLSerializer().serializeToString(svgElement);
-}
+  // Serialize the current SVG
+  private getSerializedSvg(): string {
+    const svgElement = this.svgContainer.nativeElement;
+    return new XMLSerializer().serializeToString(svgElement);
+  }
 
   @ViewChild('svgContainer', { static: false })
   svgContainer!: ElementRef<SVGSVGElement>;
@@ -124,6 +155,8 @@ private getSerializedSvg(): string {
   currentPath: SVGPathElement | null = null;
   pathData = '';
   isEraser = false;
+  isNumberInputAllowed: boolean = false;
+  userNumber: number | null = null;
 
   // **Download Edited SVG**
   downloadSvg(): void {
@@ -171,11 +204,40 @@ private getSerializedSvg(): string {
     reader.readAsDataURL(blob);
   }
 
-    // Modify `makeSvgInteractive` to track changes
-    makeSvgInteractive(): void {
-      const svg = this.svgContainer.nativeElement;
 
-      svg.querySelectorAll<SVGGraphicsElement>('path, line').forEach((element) => {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  enteredNumber: number | null = null;
+  selectedNumber: number | null = null;
+  selectedDirection: string = 'N';
+  lastEvent!: MouseEvent;
+  modalInstance: any;
+  selectedRotation: number = 0;
+  allowNumberAddition: boolean = false;
+  numbers: { x: number; y: number; value: number }[] = [];
+  makeSvgInteractive(): void {
+    const svg = this.svgContainer.nativeElement;
+
+    svg
+      .querySelectorAll<SVGGraphicsElement>('path, line, text')
+      .forEach((element) => {
         element.addEventListener('mousedown', (event) => {
           this.startDrag(event as MouseEvent, element);
         });
@@ -186,45 +248,238 @@ private getSerializedSvg(): string {
         });
       });
 
-      svg.addEventListener('mousemove', (event) => this.drag(event as MouseEvent));
-      svg.addEventListener('mouseup', () => this.endDrag());
-      svg.addEventListener('mouseleave', () => this.endDrag());
+    svg.addEventListener('mousemove', (event) =>
+      this.drag(event as MouseEvent)
+    );
+    svg.addEventListener('mouseup', () => this.endDrag());
+    svg.addEventListener('mouseleave', () => this.endDrag());
 
-      svg.addEventListener('mousedown', (event) => this.startFreehandDrawing(event));
-      svg.addEventListener('mousemove', (event) => this.drawFreehand(event));
-      svg.addEventListener('mouseup', () => {
-        this.stopFreehandDrawing();
-        this.onSvgModified(); // Save state after drawing
-      });
+    svg.addEventListener('mousedown', (event) =>
+      this.startFreehandDrawing(event)
+    );
+    svg.addEventListener('mousemove', (event) => this.drawFreehand(event));
+    svg.addEventListener('mouseup', () => {
+      this.stopFreehandDrawing();
+      this.onSvgModified(); // Save state after drawing
+    });
 
-      svg.addEventListener('click', (event) => {
-        this.eraseElement(event);
-        this.onSvgModified(); // Save state after erasing
+    // Attach or remove event listener based on the toggle state
+    svg.addEventListener('click', (event) => {
+      if (this.allowNumberAddition) {
+        const targetElement = event.target as Element; // Explicitly cast event.target to Element
+        if (targetElement && !targetElement.closest('text')) {
+          this.addNumberToSVG(event);
+          this.onSvgModified(); // Save state after adding text
+          this.allowNumberAddition = false; // Prevent further number additions
+        }
+      }
+    });
+  }
+
+  toggleNumberAddition() {
+    this.allowNumberAddition = !this.allowNumberAddition;
+  }
+
+  addNumber(event: MouseEvent) {
+    if (!this.allowNumberAddition) return;
+
+    const numValue = prompt('Enter Pressure number:');
+    if (numValue !== null && !isNaN(Number(numValue))) {
+      this.numbers.push({
+        x: event.offsetX,
+        y: event.offsetY,
+        value: Number(numValue),
       });
     }
+  }
 
 
+  addNumberToSVG(event: MouseEvent): void {
+    if (!this.allowNumberAddition) return;
 
-  // Start freehand drawing
-  startFreehandDrawing(event: MouseEvent): void {
-    if (!this.isFreehandDrawing || this.isEraser) return;
-    this.isDrawing = false;
+    this.lastEvent = event; // Store event for later use
+
+    const dialogRef = this.dialog.open(NumberDialogComponent, {
+      width: '300px',
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result && result.number !== null) {
+        this.placeNumberOnSVG(result.number, result.direction);
+      }
+    });
+  }
+
+  placeNumberOnSVG(number: number, direction: string): void {
+    const point = this.getSVGPoint(this.lastEvent.clientX, this.lastEvent.clientY);
+    if (!point) return;
+
+    const svg = this.svgContainer.nativeElement;
+
+    // Check if a number already exists at the same position to prevent duplication
+    const existingText = Array.from(svg.querySelectorAll('text')).find((el: any) =>
+      el.getAttribute('x') === point.x.toString() &&
+      el.getAttribute('y') === point.y.toString()
+    );
+    if (existingText) return;
+
+    const rotationAngle = this.getRotationAngle(direction);
+
+    const textElement = this.renderer.createElement('text', 'svg');
+    this.renderer.setAttribute(textElement, 'x', point.x.toString());
+    this.renderer.setAttribute(textElement, 'y', point.y.toString());
+    this.renderer.setAttribute(textElement, 'font-size', '12');
+    this.renderer.setAttribute(textElement, 'fill', 'black');
+    this.renderer.setAttribute(textElement, 'cursor', 'move'); // Set cursor to indicate movement
+    textElement.textContent = number.toString();
+
+    if (rotationAngle !== null) {
+      this.renderer.setAttribute(textElement, 'transform', `rotate(${rotationAngle} ${point.x} ${point.y})`);
+    }
+
+    this.renderer.appendChild(svg, textElement);
+
+    // Enable dragging using the startDrag logic
+    this.enableDragging(textElement);
+
+    // Enable deletion on double-click
+    this.renderer.listen(textElement, 'dblclick', (event: MouseEvent) => {
+      event.stopPropagation();
+      this.renderer.removeChild(svg, textElement);
+    });
+
+    this.onSvgModified();
+  }
+
+  enableDragging(element: SVGGraphicsElement): void {
+    this.renderer.listen(element, 'mousedown', (event: MouseEvent) => {
+      this.startdrag(event, element);
+    });
+  }
+
+  // Implement the dragging logic using your provided `startDrag` method
+  startdrag(event: MouseEvent, element: SVGGraphicsElement): void {
+    if (this.isDrawing || this.isFreehandDrawing || this.isEraser) return;
+    this.selectedElement = element;
 
     const point = this.getSVGPoint(event.clientX, event.clientY);
     if (!point) return;
 
-    this.pathData = `M ${point.x} ${point.y}`;
-    this.currentPath = this.renderer.createElement('path', 'svg');
+    if (element.tagName === 'text') {
+      this.startX = parseFloat(element.getAttribute('x') || '0');
+      this.startY = parseFloat(element.getAttribute('y') || '0');
+    } else {
+      // For path and line elements, use transformation matrix
+      const transform = element.transform.baseVal.consolidate();
+      this.transformMatrix = transform ? transform.matrix : new DOMMatrix();
+      this.startX = point.x - this.transformMatrix.e;
+      this.startY = point.y - this.transformMatrix.f;
+    }
 
-    if (this.currentPath) {
-      this.renderer.setAttribute(this.currentPath, 'd', this.pathData);
-      this.renderer.setAttribute(this.currentPath, 'stroke', 'black');
-      this.renderer.setAttribute(this.currentPath, 'stroke-width', '2');
-      this.renderer.setAttribute(this.currentPath, 'fill', 'none');
-      this.svgContainer.nativeElement.appendChild(this.currentPath);
+    // Attach event listeners for moving the element
+    this.renderer.listen(document, 'mousemove', this.dragElement.bind(this));
+    this.renderer.listen(document, 'mouseup', this.stopDrag.bind(this));
+  }
+
+  dragElement(event: MouseEvent): void {
+    if (!this.selectedElement) return;
+    const point = this.getSVGPoint(event.clientX, event.clientY);
+    if (!point) return;
+
+    if (this.selectedElement.tagName === 'text') {
+      this.renderer.setAttribute(this.selectedElement, 'x', point.x.toString());
+      this.renderer.setAttribute(this.selectedElement, 'y', point.y.toString());
+    } else {
+      // If dragging other elements like paths/lines, update transformation matrix
+      this.selectedElement.setAttribute(
+        'transform',
+        `translate(${point.x - this.startX}, ${point.y - this.startY})`
+      );
     }
   }
 
+  stopDrag(): void {
+    this.selectedElement = null;
+  }
+
+
+  // Function to determine rotation angle based on direction
+  getRotationAngle(direction: string | null): number | null {
+    switch (direction?.toUpperCase()) {
+      case 'N':
+        return 0;
+      case 'NE':
+        return 45;
+      case 'E':
+        return 90;
+      case 'SE':
+        return 135;
+      case 'S':
+        return 180;
+      case 'SW':
+        return 225;
+      case 'W':
+        return 270;
+      case 'NW':
+        return 315;
+      default:
+        return null; // No rotation if invalid input
+    }
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ // Start freehand drawing (assign unique ID for deletion)
+ startFreehandDrawing(event: MouseEvent): void {
+  if (!this.isFreehandDrawing || this.isEraser) return;
+  this.isDrawing = false;
+
+  const point = this.getSVGPoint(event.clientX, event.clientY);
+  if (!point) return;
+
+  this.pathData = `M ${point.x} ${point.y}`;
+  this.currentPath = this.renderer.createElement('path', 'svg');
+
+  if (this.currentPath) {
+    const uniqueId = `path-${Date.now()}`; // Generate unique ID
+    this.renderer.setAttribute(this.currentPath, 'id', uniqueId);
+    this.renderer.setAttribute(this.currentPath, 'd', this.pathData);
+    this.renderer.setAttribute(this.currentPath, 'stroke', 'black');
+    this.renderer.setAttribute(this.currentPath, 'stroke-width', '1');
+    this.renderer.setAttribute(this.currentPath, 'fill', 'none');
+    this.svgContainer.nativeElement.appendChild(this.currentPath);
+  }
+}
+ // Delete an element on double-click (now supports lines)
+ deleteElement(element: SVGGraphicsElement): void {
+  if (element.tagName === 'line' || element.tagName === 'path') {
+    console.log(`Deleting ${element.tagName} with ID: ${element.id || 'No ID'}`);
+    element.remove();
+  }
+}
   // Draw freehand with smooth curves
   drawFreehand(event: MouseEvent): void {
     if (!this.isFreehandDrawing || !this.currentPath || this.isEraser) return;
@@ -255,7 +510,6 @@ private getSerializedSvg(): string {
     this.pathData = '';
   }
 
-
   // Convert screen coordinates to SVG coordinates
   private getSVGPoint(clientX: number, clientY: number): DOMPoint | null {
     const svg = this.svgContainer.nativeElement;
@@ -267,14 +521,12 @@ private getSerializedSvg(): string {
     return ctm ? point.matrixTransform(ctm.inverse()) : null;
   }
 
-  // Erase an element (if it's under the cursor)
   eraseElement(event: MouseEvent): void {
     if (!this.isEraser) return;
 
     const point = this.getSVGPoint(event.clientX, event.clientY);
     if (!point) return;
 
-    const svg = this.svgContainer.nativeElement;
     const elementsAtPoint = document.elementsFromPoint(
       event.clientX,
       event.clientY
@@ -285,24 +537,31 @@ private getSerializedSvg(): string {
         el instanceof SVGGraphicsElement &&
         (el.tagName === 'line' || el.tagName === 'path')
       ) {
-        el.remove(); // Remove the element
+        console.log(`Deleting ${el.tagName} with ID: ${el.id || 'No ID'}`);
+        el.remove(); // Remove the selected line or path
       }
     });
   }
 
-   // Start dragging an element
-   startDrag(event: MouseEvent, element: SVGGraphicsElement): void {
+
+  // Modify `startDrag` to handle text elements
+  startDrag(event: MouseEvent, element: SVGGraphicsElement): void {
     if (this.isDrawing || this.isFreehandDrawing || this.isEraser) return;
     this.selectedElement = element;
 
     const point = this.getSVGPoint(event.clientX, event.clientY);
     if (!point) return;
 
-    const transform = element.transform.baseVal.consolidate();
-    this.transformMatrix = transform ? transform.matrix : new DOMMatrix();
-
-    this.startX = point.x - this.transformMatrix.e;
-    this.startY = point.y - this.transformMatrix.f;
+    if (element.tagName === 'text') {
+      this.startX = parseFloat(element.getAttribute('x') || '0');
+      this.startY = parseFloat(element.getAttribute('y') || '0');
+    } else {
+      // For path and line elements, use transformation matrix
+      const transform = element.transform.baseVal.consolidate();
+      this.transformMatrix = transform ? transform.matrix : new DOMMatrix();
+      this.startX = point.x - this.transformMatrix.e;
+      this.startY = point.y - this.transformMatrix.f;
+    }
   }
 
   // Dragging logic
@@ -319,14 +578,21 @@ private getSerializedSvg(): string {
     const point = this.getSVGPoint(event.clientX, event.clientY);
     if (!point) return;
 
-    const newX = point.x - this.startX;
-    const newY = point.y - this.startY;
-
-    this.renderer.setAttribute(
-      this.selectedElement,
-      'transform',
-      `translate(${newX},${newY})`
-    );
+    if (this.selectedElement.tagName === 'text') {
+      const deltaX = point.x - this.startX;
+      const deltaY = point.y - this.startY;
+      this.selectedElement.setAttribute('x', (this.startX + deltaX).toString());
+      this.selectedElement.setAttribute('y', (this.startY + deltaY).toString());
+    } else {
+      // Move lines and paths using transform
+      const newX = point.x - this.startX;
+      const newY = point.y - this.startY;
+      this.renderer.setAttribute(
+        this.selectedElement,
+        'transform',
+        `translate(${newX},${newY})`
+      );
+    }
   }
 
   // End dragging
@@ -335,10 +601,7 @@ private getSerializedSvg(): string {
     this.transformMatrix = null;
   }
 
-  // Delete an element on double-click
-  deleteElement(element: SVGGraphicsElement): void {
-    element.remove();
-  }
+
 
   // Toggle freehand drawing mode
   toggleFreehandDrawMode(): void {
@@ -353,16 +616,75 @@ private getSerializedSvg(): string {
     this.isDrawing = false;
     this.isFreehandDrawing = false;
   }
-
-
-  toggleDrawer() {
-    if (this.drawerPageComponent) {
-      this.drawerPageComponent.toggleDrawer(); // Toggle drawer open/close
-    } else {
-      console.error('DrawerPageComponent not found!');
-    }
-  }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /*
 import { Component, AfterViewInit, ElementRef, ViewChild, Renderer2 } from '@angular/core';
@@ -849,4 +1171,40 @@ makeSvgInteractive(svg: SVGElement): void {
     document.body.removeChild(a);
   }
 }
+
+
+
+  addNumberToSVG(event: MouseEvent): void {
+    if (!this.allowNumberAddition) return; // Prevent number addition if not allowed
+
+    const point = this.getSVGPoint(event.clientX, event.clientY);
+    if (!point) return;
+
+    const svg = this.svgContainer.nativeElement;
+    const number = prompt('Enter a number:', '1'); // Ask user for input
+    if (!number || isNaN(Number(number))) return; // Exit if invalid input
+
+    // Ask user for rotation direction
+    const direction = prompt('Enter direction (N, W, S, E):', 'N');
+    const rotationAngle = this.getRotationAngle(direction);
+
+    const textElement = this.renderer.createElement('text', 'svg');
+    this.renderer.setAttribute(textElement, 'x', point.x.toString());
+    this.renderer.setAttribute(textElement, 'y', point.y.toString());
+    this.renderer.setAttribute(textElement, 'font-size', '12'); // Decreased font size
+    this.renderer.setAttribute(textElement, 'fill', 'black');
+    textElement.textContent = number;
+
+    // Apply rotation transformation
+    if (rotationAngle !== null) {
+      this.renderer.setAttribute(
+        textElement,
+        'transform',
+        `rotate(${rotationAngle} ${point.x} ${point.y})`
+      );
+    }
+
+    this.renderer.appendChild(svg, textElement);
+    this.onSvgModified(); // Save state after adding text
+  }
 */

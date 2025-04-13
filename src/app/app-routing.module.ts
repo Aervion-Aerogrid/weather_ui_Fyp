@@ -30,17 +30,31 @@ const routes: Routes = [
   { path: 'login', component: LoginpageComponent },
   { path: 'signup', component: SignuppageComponent, canActivate: [PinGuard] },
   { path: 'homepage', component: HomepageComponent,canActivate: [AuthGuard] },
-  { path: 'visualization', component: VisualizationComponent, canActivate: [AuthGuard] },
+  //{ path: 'visualization', component: VisualizationComponent, canActivate: [AuthGuard] },
   { path: 'climate', component: ClimatepageComponent, canActivate: [AuthGuard] },
-  { path: 'bot', component: BotComponent, canActivate: [AuthGuard] },
+  //{ path: 'bot', component: BotComponent, canActivate: [AuthGuard] },
   { path: 'svg-edit', component: SvgEditComponent, canActivate: [AuthGuard] },
   { path: 'secretpin', component: SecretPinComponent },
   { path: 'setting', loadChildren: () => import('./components/setting-module/setting-module.module').then(m => m.SettingModuleModule), canActivate: [AuthGuard] },
-  { path: 'my-route', loadChildren: () => import('./components/error-module/error-module.module').then(m => m.ErrorModuleModule) },
-  { path: 'error', loadChildren: () => import('./components/error-module/error-module.module').then(m => m.ErrorModuleModule) },
+  { path: 'error', loadChildren: () => import('./components/error-module/error-module.module').then(m => m.ErrorModuleModule), canActivate: [AuthGuard] },
+   { path: 'printing', loadChildren: () => import('./components/printing-module/printing-module.module').then(m => m.PrintingModuleModule), canActivate: [AuthGuard] },
   { path: '**', redirectTo: '/error' }
 ];
 
+/*
+const routes: Routes = [
+  { path: '', redirectTo: '/homepage', pathMatch: 'full' },
+  { path: 'homepage', component: HomepageComponent },
+  { path: 'visualization', component: VisualizationComponent},
+  { path: 'climate', component: ClimatepageComponent},
+  { path: 'bot', component: BotComponent },
+  { path: 'svg-edit', component: SvgEditComponent},
+  { path: 'setting', loadChildren: () => import('./components/setting-module/setting-module.module').then(m => m.SettingModuleModule)},
+  { path: 'error', loadChildren: () => import('./components/error-module/error-module.module').then(m => m.ErrorModuleModule) },
+  { path: 'printing', loadChildren: () => import('./components/printing-module/printing-module.module').then(m => m.PrintingModuleModule) },
+  { path: '**', redirectTo: '/error' }
+];
+*/
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

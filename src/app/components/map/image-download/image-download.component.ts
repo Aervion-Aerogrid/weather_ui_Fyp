@@ -10,6 +10,7 @@ export class ImageDownloadComponent implements OnChanges {
   @Input() imageType: string = ''; // Input from parent (the type of image)
   images: { url: string; name: string }[] = []; // Store fetched images with names
   loading: boolean = false;
+  downloadAsSvg: boolean = false; // Toggle for SVG or PNG download
 
   constructor(private imageService: IsobarImageDataService) {}
 
@@ -21,22 +22,33 @@ export class ImageDownloadComponent implements OnChanges {
 
   fetchImages(): void {
     this.loading = true;
+    this.images = []; // Clear previous images
 
-    // Check if the new image type is different from the previous one
     if (this.imageType) {
       this.imageService.getIsobarData(this.imageType).subscribe({
         next: (data) => {
           console.log('Received data:', data);
 
-          // Assuming the images from the backend have 'url' but not 'name'
-          if (data && data.layer_image_url && data.heatmap_image_url) {
-            const newImages = [
-              { url: data.layer_image_url, name: this.extractFileName(data.layer_image_url) },
-              { url: data.heatmap_image_url, name: this.extractFileName(data.heatmap_image_url) }
-            ];
-
-            // Append new images to the existing images array
-            this.images = [...this.images, ...newImages];  // Optionally replace the entire array instead of appending
+          if (data && data.layer_image_url) {
+            // If SVG is selected, fetch only layer_image_url
+            if (this.downloadAsSvg) {
+              this.images.push({
+                url: data.layer_image_url.replace('.png', '.svg'), // Assuming backend provides SVG equivalent
+                name: this.extractFileName(data.layer_image_url).replace('.png', '.svg')
+              });
+            } else {
+              // Otherwise, fetch both layer and heatmap images in PNG format
+              if (data.heatmap_image_url) {
+                this.images.push({
+                  url: data.heatmap_image_url,
+                  name: this.extractFileName(data.heatmap_image_url)
+                });
+              }
+              this.images.push({
+                url: data.layer_image_url,
+                name: this.extractFileName(data.layer_image_url)
+              });
+            }
           } else {
             console.error('Unexpected data structure:', data);
           }
@@ -51,15 +63,11 @@ export class ImageDownloadComponent implements OnChanges {
   }
 
   extractFileName(url: string): string {
-    // Extract file name from the URL
-    return url.split('/').pop() || 'default_image.jpg'; // Fallback to 'default_image.jpg' if URL is malformed
+    return url.split('/').pop() || 'default_image.jpg'; // Extract filename from URL
   }
 
   openImageInPopup(image: { url: string; name: string }): void {
-    // Open a new window with the image
     const popup = window.open('', '_blank', 'width=600,height=400');
-
-    // Add the image and download link to the popup
     popup?.document.write(`
       <html>
         <head>
@@ -98,9 +106,3 @@ export class ImageDownloadComponent implements OnChanges {
     `);
   }
 }
-
-
-
-
-
-

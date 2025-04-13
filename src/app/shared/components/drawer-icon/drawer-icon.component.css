@@ -1,0 +1,20 @@
+.menu-icon {
+  width: 40px;  /* Adjust the width */
+  height: 40px; /* Adjust the height */
+  transition: transform 0.3s ease, opacity 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.menu-icon:hover {
+  transform: scale(1.1); /* Slightly enlarge the icon */
+  opacity: 0.8; /* Make the icon slightly transparent on hover */
+}
+
+/* Optional: Add some spacing to the button */
+.drawer-button {
+  margin-right: 20px;
+  margin-bottom: 20px;
+  background-color: transparent;
+  border: none;
+  padding: 0;
+}
+

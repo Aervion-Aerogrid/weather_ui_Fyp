@@ -1,0 +1,54 @@
+/* Apply styles to the dialog container */
+mat-dialog-container {
+  padding: 20px;
+  border-radius: 8px;
+}
+
+/* Center the form and space out elements */
+h2 {
+  text-align: center;
+  font-size: 20px;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+/* Styling for the form fields */
+mat-form-field {
+  width: 100%; /* Full width for better alignment */
+  margin-bottom: 15px;
+}
+
+/* Style input fields */
+input[matInput] {
+  font-size: 16px;
+}
+
+/* Style the action buttons */
+.mat-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+
+/* Button Styling */
+button {
+  font-size: 14px;
+  padding: 8px 16px;
+  border-radius: 4px;
+}
+
+/* Style the primary confirm button */
+button[color="primary"] {
+  background-color: #1976d2;
+  color: white;
+  transition: background 0.3s;
+}
+
+button[color="primary"]:hover {
+  background-color: #1565c0;
+}
+
+/* Cancel button hover effect */
+button:not([color="primary"]):hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}

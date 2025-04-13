@@ -1,0 +1,21 @@
+<h2>Select Number and Direction</h2>
+
+<!-- Number Input -->
+<mat-form-field appearance="fill">
+  <mat-label>Enter Number</mat-label>
+  <input matInput type="number" [(ngModel)]="selectedNumber" />
+</mat-form-field>
+
+<!-- Direction Dropdown -->
+<mat-form-field appearance="fill">
+  <mat-label>Direction</mat-label>
+  <mat-select [(ngModel)]="selectedDirection">
+    <mat-option *ngFor="let dir of directions" [value]="dir">{{ dir }}</mat-option>
+  </mat-select>
+</mat-form-field>
+
+<!-- Dialog Actions -->
+<div mat-dialog-actions>
+  <button mat-button (click)="dialogRef.close()">Cancel</button>
+  <button mat-button color="primary" (click)="confirmSelection()">Confirm</button>
+</div>

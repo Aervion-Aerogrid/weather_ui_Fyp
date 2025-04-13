@@ -1,0 +1,45 @@
+<div class="container mt-4">
+  <h2 class="text-center mb-4">SVG Image Printing</h2>
+
+  <div class="text-center">
+    <!-- Show Button if not loading -->
+    <button *ngIf="!loading" class="btn btn-success btn-lg" (click)="loadImages()">
+      Load Images
+    </button>
+
+    <!-- Show Spinner while loading -->
+    <div *ngIf="loading" class="spinner-border text-success" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <div class="table-responsive mt-3" *ngIf="svgImages.length > 0">
+    <table class="table table-hover text-center">
+      <thead class="thead-dark">
+        <tr>
+          <th>Image</th>
+          <th>Name</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let image of svgImages; let i = index"
+            [ngClass]="{
+              'loading-red': currentLoadingIndex === i,
+              'loading-green': lastLoadedIndex === i
+            }">
+          <td>
+            <img *ngIf="image.base64" [src]="'data:image/svg+xml;base64,' + image.base64" alt="{{ image.type }}"
+              class="img-thumbnail" style="width: 100px; height: auto;">
+          </td>
+          <td>{{ image.type }}</td>
+          <td>
+            <button class="btn btn-primary btn-lg" (click)="printImage(image.base64)">
+              Print
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

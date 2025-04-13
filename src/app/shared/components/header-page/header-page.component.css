@@ -69,6 +69,42 @@
   display: flex;
   align-items: center;
 }
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 20px; /* Ensures spacing between icon and text */
+}
+
+.navbar-icon {
+  width: 40px; /* Adjust as needed */
+  height: auto;
+}
+
+.text-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.animated-text {
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+  animation: fadeIn 1.5s ease-in-out;
+}
+
+.main-text {
+  font-size: 18px;
+}
+
+.sub-text {
+  font-size: 14px;
+  color: gray; /* Optional: makes it visually distinct */
+}
+
+/* Example animation */
+@keyframes fadeIn {
+  0% { opacity: 0; transform: translateY(-5px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
 
 
 
@@ -118,6 +154,58 @@
   background-color: red;
   color: white;
 }
+
+
+
+
+
+
+
+
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Spacing between image and text */
+}
+
+.navbar-icon {
+  width: 50px; /* Adjust icon size */
+  height: auto;
+}
+
+.text-container {
+  display: flex;
+  flex-direction: column; /* Ensures text stays stacked */
+  line-height: 1.2; /* Improves readability */
+}
+
+.animated-text {
+  font-family: "Poppins", sans-serif; /* Modern and professional font */
+  text-transform: uppercase;
+}
+
+.main-text {
+  font-weight: 600; /* Extra bold for emphasis */
+  font-size: 1.0rem; /* Bigger size */
+  color: #333; /* Darker shade */
+}
+
+.sub-text {
+  font-weight: 400; /* Lighter weight */
+  font-size: 0.7rem; /* Smaller size */
+  color: #666; /* Softer contrast */
+  letter-spacing: 0.5px; /* Subtle spacing for clarity */
+}
+
+
+
+
+
+
+
+
+
 
 
 

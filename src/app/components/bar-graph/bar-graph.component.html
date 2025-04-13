@@ -21,6 +21,20 @@
 
 
 </div>
+<!-- Year Range Selection -->
+<div class="d-flex justify-content-center align-items-center mb-3 flex-wrap">
+  <mat-form-field appearance="outline" class="year-range-field">
+    <mat-label>Start Year</mat-label>
+    <input matInput type="number" [(ngModel)]="startYear" min="1950" max="2050" (change)="fetchClimateData()">
+  </mat-form-field>
+
+  <span class="mx-3">to</span>
+
+  <mat-form-field appearance="outline" class="year-range-field">
+    <mat-label>End Year</mat-label>
+    <input matInput type="number" [(ngModel)]="endYear" min="1950" max="2050" (change)="fetchClimateData()">
+  </mat-form-field>
+</div>
 
 <!-- Chart Container -->
 <div *ngIf="chartOptions?.data">

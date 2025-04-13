@@ -37,19 +37,7 @@ export class BotComponent {
     }
   }
 
-  @ViewChild(DrawerpageComponent) drawerPageComponent!: DrawerpageComponent;
-  ngAfterViewInit() {
-    if (!this.drawerPageComponent) {
-      console.error('DrawerPageComponent not found!');
-    }
-  }
 
-  toggleDrawer() {
-    if (this.drawerPageComponent) {
-      this.drawerPageComponent.toggleDrawer(); // Toggle drawer open/close
-    } else {
-      console.error('DrawerPageComponent not found!');
-    }
-  }
+
 }
 

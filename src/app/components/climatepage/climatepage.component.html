@@ -1,16 +1,6 @@
 <div *ngIf="refreshTrigger">
-  <app-headerpage></app-headerpage>
-
-  <div class="row mx-3 my-3">
-    <div class="col d-flex align-items-center justify-content-start p-3">
-      <button title="drawer" type="button" class="btn btn-light drawer-button" (click)="toggleDrawer()">
-        <img src="../../../assets/icons/menu_icon2.png" alt="Menu Icon" class="menu-icon">
-      </button>
-      <h1 class="ml-2">Menu</h1>
-    </div>
-  </div>
-
-  <app-drawerpage></app-drawerpage>
+  <app-header-page></app-header-page>
+  <app-drawer-icon></app-drawer-icon>
 
   <!-- Main Layout -->
   <main class="content p-9">
@@ -78,4 +68,6 @@
       </div>
     </div>
   </main>
+  <app-footerpage ></app-footerpage>
 </div>
+

@@ -9,6 +9,10 @@ import { ClimateDataService } from '../../services/climate/climate-data.service'
 export class BarGraphComponent implements OnInit {
   selectedCity: string = 'karachi';
   selectedParameter: string = 'temperature_2m_mean';
+  // **Set default range to 2010-2025**
+  startYear: number = 1990;
+  endYear: number = 2025;
+  availableYears: number[] = Array.from({ length: 101 }, (_, i) => 1950 + i);
 
   availableCities: string[] = ['karachi','Ahmedpur East','Dera Ghazi Khan',
     'Gilgit','Jacobabad','Jaranwala','Kamoke','Khanewal','Larkana','Multan',
@@ -49,56 +53,53 @@ export class BarGraphComponent implements OnInit {
   }
 
   updateChart(data: any) {
-    console.log(`Updating chart for Yearly Data`, data);
+    console.log(`Updating chart for`, data);
 
-    let dataPoints: { label: string, y: number }[] = [];
-
-    if (!data || data.length === 0) {
-      console.warn("No Yearly data available!");
-      dataPoints = [{ label: "No Data", y: 0 }];
-    } else {
-      dataPoints = data.map((item: any) => ({
-        label: item.year?.toString() || "Unknown",
+    let dataPoints = data
+      .filter((item: any) => item.year >= this.startYear && item.year <= this.endYear) // Filter by selected range
+      .map((item: any) => ({
+        label: item.year.toString(),
         y: item[this.selectedParameter] ?? 0
       }));
+
+    if (dataPoints.length === 0) {
+      console.warn("No data available in selected range!");
+      dataPoints = [{ label: "No Data", y: 0 }];
     }
 
-    console.log("Generated DataPoints:", dataPoints);
-
-    // **Set new chart options**
     this.setChartOptions(dataPoints);
   }
 
   setChartOptions(dataPoints: any) {
     this.chartOptions = {
-      title: { text: `${this.selectedCity} Yearly ${this.selectedParameter} Data` },
+      title: { text: `${this.selectedCity} (${this.startYear}-${this.endYear}) ${this.selectedParameter} Data` },
       theme: "light2",
-      animationEnabled: true, // Ensure animation is enabled
+      animationEnabled: true,
       exportEnabled: false,
-      credit: false,
-      axisY: {
-        includeZero: false,
-        title: `${this.selectedParameter} (Units)`
+      axisY: { includeZero: false, title: `${this.selectedParameter} (Units)` },
+      axisX: {
+        title: "Year",
+        interval: 5, // Show every 5 years on X-axis
       },
-      data: [{
-        type: "column",
-        color: "#90EE90",
-        dataPoints: [...dataPoints]
-      }]
+      data: [{ type: "column", color: "#90EE90", dataPoints }]
     };
 
     console.log("Updated Chart Options:", this.chartOptions);
-    this.cdr.detectChanges(); // Force change detection to apply updates
+    this.cdr.detectChanges();
   }
 
   onCityChange(event: any) {
     this.selectedCity = event.value;
-    this.fetchClimateData(); // Fetch new data on city change
+    this.fetchClimateData();
   }
 
   onParameterChange(event: any) {
     this.selectedParameter = event.value;
-    this.fetchClimateData(); // Fetch new data on parameter change
+    this.fetchClimateData();
+  }
+
+  onYearRangeChange() {
+    this.fetchClimateData();
   }
 
   reloadChart() {

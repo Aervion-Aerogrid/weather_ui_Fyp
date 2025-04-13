@@ -1,113 +1,169 @@
-<app-headerpage></app-headerpage>
-
+<app-header-page></app-header-page>
+<app-drawer-icon></app-drawer-icon>
 <div class="row mx-3 my-3">
-  <div class="col d-flex align-items-center justify-content-start p-3">
-    <!-- Drawer Button -->
-    <button
-      title="Open Drawer"
-      type="button"
-      class="btn btn-light drawer-button mx-2"
-      (click)="toggleDrawer()"
-    >
-      <img
-        src="../../../assets/icons/menu_icon2.png"
-        alt="Menu Icon"
-        class="menu-icon"
-      />
-    </button>
+  <main class="content">
+    <div class="container">
+      <div class="row mx-3 my-3">
+        <!-- Main Column (80%) -->
+        <div class="col-md">
+          <div class="d-flex align-items-center justify-content-center p-3">
+            <a
+              href="/homepage"
+              class="btn btn-light home-button me-3"
+              title="Home"
+            >
+              <i class="fas fa-home"></i>
+            </a>
+            <h1 class="m-0">Editing Isolines Images</h1>
+          </div>
 
-    <h1 class="ml-2">Menu</h1>
-  </div>
+          <p>
+            Use the tools below to edit, add, and delete isolines from your SVG
+            image.
+          </p>
+
+          <!-- Image Type Selection -->
+          <div class="options-container">
+            <mat-form-field appearance="fill" class="dropdown">
+              <mat-label>Select Image Type:</mat-label>
+              <mat-select
+                [(ngModel)]="selectedImageType"
+                (selectionChange)="onImageTypeChange($event)"
+              >
+                <mat-option *ngFor="let type of imageTypes" [value]="type">
+                  {{ type }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <!-- Control Buttons -->
+          <div class="controls mt-3">
+            <button mat-button color="primary" (click)="sendSvgToBackend()">
+              Upload SVG
+            </button>
+            <button mat-button (click)="undo()">Undo</button>
+            <button mat-button (click)="redo()">Redo</button>
+          </div>
+          <div
+  class="svg-container mt-3"
+  [ngStyle]="{
+    'background-image': backgroundImageUrl ? 'url(' + backgroundImageUrl + ')' : 'none',
+  }"
+>
+  <svg
+    #svgContainer
+    width="100%"
+    height="100%"
+    xmlns="http://www.w3.org/2000/svg"
+  ></svg>
 </div>
-<main class="content">
-  <app-drawerpage></app-drawerpage>
-  <div class="container">
-    <div class="row mx-3 my-3">
-      <!-- Main Column (80%) -->
-      <div class="col-md-8">
-        <div class="d-flex align-items-center justify-content-center p-3">
-          <a href="/homepage" class="btn btn-light home-button me-3" title="Home">
-            <i class="fas fa-home"></i>
-          </a>
-          <h1 class="m-0">Editing Isolines Images</h1>
+
+<!--
+          <div
+            class="svg-container mt-3"
+            [ngStyle]="{
+              'background-image': backgroundImageUrl
+                ? 'url(' + backgroundImageUrl + ')'
+                : 'none',
+              'background-size': 'contain',
+              'background-repeat': 'no-repeat',
+              'background-position': 'center',
+              position: 'relative'
+            }"
+          >
+            <svg
+              #svgContainer
+              width="100%"
+              height="100%"
+              xmlns="http://www.w3.org/2000/svg"
+            ></svg>
+          </div>
+        -->
+          <!-- More Control Buttons -->
+          <div class="controls mt-3">
+            <button class="btn btn-primary mx-1" (click)="loadSvg()">
+              Reload SVG
+            </button>
+            <button
+              class="btn btn-warning mx-1"
+              (click)="toggleFreehandDrawMode()"
+            >
+              {{
+                isFreehandDrawing ? "Stop Freehand Drawing" : "Freehand Draw"
+              }}
+            </button>
+            <button class="btn btn-danger mx-1" (click)="toggleEraserMode()">
+              {{ isEraser ? "Stop Erasing" : "Erase" }}
+            </button>
+            <button
+              class="btn btn-success my-2"
+              (click)="toggleNumberAddition()"
+            >
+              {{
+                allowNumberAddition
+                  ? "Disable Number Addition"
+                  : "Allow Number Addition"
+              }}
+            </button>
+          </div>
         </div>
 
-        <p>Use the tools below to edit, add, and delete isolines from your SVG image.</p>
+        <!-- Instruction Card (20%) -->
 
-        <!-- Image Type Selection -->
-        <div class="options-container">
-          <mat-form-field appearance="fill" class="dropdown">
-            <mat-label>Select Image Type:</mat-label>
-            <mat-select [(ngModel)]="selectedImageType" (selectionChange)="onImageTypeChange($event)">
-              <mat-option *ngFor="let type of imageTypes" [value]="type">
-                {{ type }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-
-        <!-- Control Buttons -->
-        <div class="controls mt-3">
-          <button mat-button (click)="downloadSvg()">Download SVG</button>
-          <button mat-button color="primary" (click)="sendSvgToBackend()">Upload SVG</button>
-          <button mat-button (click)="undo()">Undo</button>
-          <button mat-button (click)="redo()">Redo</button>
-        </div>
-
-        <!-- SVG Editing Container -->
-        <div class="svg-container mt-3">
-          <svg #svgContainer width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-            <!-- Background Image -->
-            <image href="../../../assets/world.svg" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" />
-          </svg>
-        </div>
-
-        <!-- More Control Buttons -->
-        <div class="controls mt-3">
-          <button class="btn btn-primary mx-1" (click)="loadSvg()">Reload SVG</button>
-          <button class="btn btn-warning mx-1" (click)="toggleFreehandDrawMode()">
-            {{ isFreehandDrawing ? "Stop Freehand Drawing" : "Freehand Draw" }}
-          </button>
-          <button class="btn btn-danger mx-1" (click)="toggleEraserMode()">
-            {{ isEraser ? "Stop Erasing" : "Erase" }}
-          </button>
-        </div>
-      </div>
-
-      <!-- Instruction Card (20%) -->
-      <div class="col-md-3 ms-3">
         <div class="instruction-card p-4">
-          <h2>Instructions</h2>
+          <h2>How to Use the SVG Editor</h2>
+
+          <!-- Drawing -->
+          <h3>✏️ Drawing</h3>
           <ul>
-            <li><p>Select an image type from the dropdown.</p></li>
-            <li><p>Use the tools to edit, add, or delete isolines.</p></li>
-            <li><p>Click "Download" to save your SVG file.</p></li>
-            <li><p>Click "Upload" to send it to the server.</p></li>
-            <li><p>Click Undo/Redo to get back changes.</p></li>
+            <li><p>Use the freehand tool to draw new lines.</p></li>
+            <li><p>Click on a line to move it.</p></li>
           </ul>
+
+          <!-- Deleting -->
+          <h3>🗑️ Deleting</h3>
           <ul>
-            <li><p>One click on any line to drag it.</p></li>
-            <li><p>Use the freehand draw to draw lines.</p></li>
-            <li><p>Use Erase to delete lines or double click a line.</p></li>
-            <li><p>Reload SVG to get the initial image.</p></li>
+            <li><p>Double-click a line to remove it.</p></li>
+            <li><p>Use the Erase tool to delete lines.</p></li>
+          </ul>
+
+          <!-- Undo/Redo & Reload -->
+          <h3>🔄 Undo, Redo & Reload</h3>
+          <ul>
+            <li><p>Click "Undo" to revert changes.</p></li>
+            <li><p>Click "Redo" to redo a reverted action.</p></li>
+            <li><p>Click "Reload SVG" to restore the original image.</p></li>
+          </ul>
+
+          <!-- Adding Isoline Values -->
+          <h3>🔢 Adding Isoline Values</h3>
+          <ul>
+            <li>
+              <p>
+                Click anywhere on the SVG to add a number (only one per
+                session).
+              </p>
+            </li>
+            <li><p>Choose a value and direction from the input fields.</p></li>
+          </ul>
+
+          <!-- Dragging Lines -->
+          <h3>🖱️ Moving Lines</h3>
+          <ul>
+            <li><p>Click on any line to drag and reposition it.</p></li>
+          </ul>
+
+          <!-- Saving & Uploading -->
+          <h3>💾 Saving & Uploading</h3>
+          <ul>
+            <li><p>Click "Download" to save your edited SVG file.</p></li>
+            <li><p>Click "Upload" to send your SVG to the server.</p></li>
           </ul>
         </div>
       </div>
     </div>
-  </div>
-</main>
-
-
-<!-- The SVG content will be dynamically loaded here
-<div class="svg-wrapper">
-  <div class="svg-container">
-    <svg #svgContainer width="800" height="600">
-       The SVG content will be dynamically loaded here
-    </svg>
-  </div>
+  </main>
 </div>
-
-<div class="controls">
-  <button (click)="loadSvg()">Load SVG</button>
-</div>
--->
+<app-printing></app-printing>
+<app-footerpage></app-footerpage>

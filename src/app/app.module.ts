@@ -8,7 +8,9 @@ import { FormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { RouterModule } from '@angular/router';
-
+import {  HttpClient } from '@angular/common/http';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 // COMPONENTS
 import { HomepageComponent } from './components/homepage/homepage.component';
 import { HeaderpageComponent } from './components/headerpage/headerpage.component';
@@ -41,6 +43,7 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatDialogModule } from '@angular/material/dialog';
 
 // SERVICES
 import { CsvDataService } from './services/csv/csv-data.service';
@@ -57,6 +60,14 @@ import { MonthBarComponent } from './components/month-bar/month-bar.component';
 import { ClimateReportComponent } from './components/climatepage/climate-report/climate-report.component';
 import { SvgEditComponent } from './components/svg-edit/svg-edit.component';
 import { SharedModule } from './shared/shared.module';
+import { SettingModuleModule} from './components/setting-module/setting-module.module';
+import { NumberDialogComponent } from './components/svg-edit/number-dialog/number-dialog.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { PrintingModuleModule } from './components/printing-module/printing-module.module';
+import { EarlyForecastComponent } from './components/early-forecast/early-forecast.component';
+
+
 
 @NgModule({
   declarations: [
@@ -81,6 +92,9 @@ import { SharedModule } from './shared/shared.module';
     MonthBarComponent,
     ClimateReportComponent,
     SvgEditComponent,
+    NumberDialogComponent,
+    EarlyForecastComponent,
+
   ],
   imports: [
     BrowserModule,
@@ -107,7 +121,12 @@ import { SharedModule } from './shared/shared.module';
     MatIconModule,
     MatDividerModule,
     SharedModule,
-  ],
+    SettingModuleModule,
+    MatDialogModule,
+    MatFormFieldModule,
+    MatInputModule,
+    PrintingModuleModule
+],
   providers: [CsvDataService, IsobarImageDataService, AuthService],
   bootstrap: [AppComponent],
 })

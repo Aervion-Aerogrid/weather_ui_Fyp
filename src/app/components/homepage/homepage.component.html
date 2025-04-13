@@ -1,19 +1,7 @@
 
-<app-headerpage></app-headerpage>
-<div class="row mx-3 my-3"> <!-- Added margin from all sides -->
-  <div class="col d-flex align-items-center justify-content-start p-3"> <!-- Added padding inside the column -->
-    <button title="drawer" type="button" class="btn btn-light drawer-button" (click)="toggleDrawer()">
-      <!-- Use image from assets folder instead of lines -->
-      <img src="../../../assets/icons/menu_icon2.png" alt="Menu Icon" class="menu-icon"> <!-- Adjust the image source and class as needed -->
-    </button>
-    <h1 class="ml-2">Menu</h1>
-  </div>
-</div>
-
+<app-header-page></app-header-page>
+<app-drawer-icon></app-drawer-icon>
 <main class="content">
-  <!-- Drawer Component -->
-  <app-drawerpage></app-drawerpage>
-
   <!-- Map Component -->
   <app-map></app-map>
   <app-detail></app-detail>

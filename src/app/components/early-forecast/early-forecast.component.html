@@ -1,0 +1,58 @@
+<div class="weather-container">
+  <!-- Section 1: City Info + Map + City Dropdown
+  <div class="top-section">
+    <div class="city-info">
+      <div class="city-selector">
+      </div>
+
+      <p>{{ currentTime }}</p>
+      <h2>{{ cityName }}</h2>
+      <div class="city-selector mat-elevation-z2" style="margin-bottom: 20px; max-width: 300px;">
+        <mat-form-field appearance="fill" style="width: 100%;">
+          <mat-label>Select City</mat-label>
+          <mat-select [(value)]="cityName" (selectionChange)="onCityChange($event)">
+            <mat-option *ngFor="let city of cities" [value]="city">
+              {{ city }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="weather-details">
+        <h1>{{ temperature }}°C</h1>
+        <p>Feels like {{ feelsLike }}°C. {{ condition }}. {{ windDesc }}</p>
+        <ul>
+          <li>💨 {{ windSpeed }} m/s {{ windDirection }}</li>
+          <li>📈 {{ pressure }} hPa</li>
+          <li>💧 {{ humidity }}%</li>
+          <li>🌡️ Dew: {{ dewPoint }}°C</li>
+          <li>👀 Visibility: {{ visibility }} km</li>
+        </ul>
+      </div>
+    </div>
+    <div id="map" class="map-container"></div>
+  </div>
+
+
+  <div class="content-columns">
+
+    <div class="graph-section">
+      <canvas id="tempChart"></canvas>
+    </div>
+
+
+    <div class="forecast-section">
+      <h3>8-day forecast</h3>
+      <div class="forecast-list">
+        <div class="forecast-item" *ngFor="let day of forecast">
+          <p>{{ day.date }}</p>
+          <p>{{ day.tempMax }} / {{ day.tempMin }}°C</p>
+          <div class="condition-icon">
+            <img [src]="getIcon(day.condition)" alt="icon" />
+            <p>{{ day.condition }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+-->
